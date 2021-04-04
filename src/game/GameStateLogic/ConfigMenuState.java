@@ -9,6 +9,8 @@ import game.Core.GamePanel;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 
 /**
@@ -33,8 +35,8 @@ public class ConfigMenuState extends GameState {
 	public void render(Graphics g) {
 	
 	
-		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
+		Image background = Toolkit.getDefaultToolkit().getImage("./src/game/Graphics/background.png");
+		g.drawImage(background, 0, 0, null);
 		
 		for(int i = 0; i < this.options.length; i++) {
 			

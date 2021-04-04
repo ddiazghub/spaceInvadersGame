@@ -34,13 +34,14 @@ public class MainMenuState extends GameState {
 	
 	public void render(Graphics g) {
 		
-		Image image = Toolkit.getDefaultToolkit().getImage("./src/game/Graphics/logo.png");
+		Image background = Toolkit.getDefaultToolkit().getImage("./src/game/Graphics/background.png");
+		Image logo = Toolkit.getDefaultToolkit().getImage("./src/game/Graphics/logo.png");
 	
 		//Creando el fondo
-		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
+		g.drawImage(background, 0, 0, null);
 		
-		g.drawImage(image, GamePanel.WIDTH / 2 - image.getWidth(null) / 2, -130, null);
+		
+		g.drawImage(logo, GamePanel.WIDTH / 2 - logo.getWidth(null) / 2, -110, null);
 	
 		
 		for(int i = 0; i < this.options.length; i++) {
@@ -53,7 +54,7 @@ public class MainMenuState extends GameState {
 			}
 			
 			g.setFont(new Font("Arial", Font.PLAIN, 40));
-			g.drawString(this.options[i], GamePanel.WIDTH / 2 - g.getFontMetrics().stringWidth(this.options[i]) / 2, 370 + i * 60);
+			g.drawString(this.options[i], GamePanel.WIDTH / 2 - g.getFontMetrics().stringWidth(this.options[i]) / 2, 390 + i * 50);
 		}
 	}
 	

@@ -35,10 +35,8 @@ public class GMSelectState extends GameState {
 
 	public void render(Graphics g) {
 
-		Image image = Toolkit.getDefaultToolkit().getImage("./src/game/Graphics/logo.png");
-
-		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
+		Image background = Toolkit.getDefaultToolkit().getImage("./src/game/Graphics/background.png");
+		g.drawImage(background, 0, 0, null);
 
 		g.setColor(new Color(51, 175, 255));
 		g.fillRect(150, 300, 10, GamePanel.HEIGHT - 350);
