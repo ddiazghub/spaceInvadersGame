@@ -13,9 +13,9 @@ import java.awt.Toolkit;
  */
 public class Enemy extends Character {
 	
-	public Enemy(int x, int y, int hp, int movementSpeed, String imagePath) {
+	public Enemy(int x, int y, int hp, int movementSpeed, Weapon weapon,String imagePath) {
 		
-		super(x, y, hp, movementSpeed, imagePath);
+		super(x, y, hp, movementSpeed, weapon, imagePath);
 		
 	} 
 	

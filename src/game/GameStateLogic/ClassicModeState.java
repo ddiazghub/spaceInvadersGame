@@ -13,6 +13,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import game.Components.Player;
+import game.Components.Weapon;
 
 /**
  *
@@ -30,7 +31,8 @@ public class ClassicModeState extends GameState{
 	}
 
 	public void init() {
-		this.player = new Player(GamePanel.WIDTH / 2, GamePanel.HEIGHT - 100, 1, 1, "./src/game/Graphics/Player/nave2.png");
+		Weapon base = new Weapon(100, 100, 5, "./src/game/Graphics/Player/disparo.png");
+		this.player = new Player(GamePanel.WIDTH / 2, GamePanel.HEIGHT - 100, 1, 1, base, "./src/game/Graphics/Player/nave2.png");
 	}
 
 	public void tick() {

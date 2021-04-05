@@ -17,34 +17,35 @@ public class Player extends Character {
 
 	private boolean right = false;
 	private boolean left = false;
+	private boolean shooting = false;
 
-	public Player(int x, int y, int hp, int movementSpeed, String imagePath) {
+	public Player(int x, int y, int hp, int movementSpeed, Weapon weapon, String imagePath) {
 
-		super(x, y, hp, movementSpeed, imagePath);
-
+		super(x, y, hp, movementSpeed, weapon, imagePath);
+		this.weapon.setY(this.yPos);
 	}
 
 	public void tick() {
 		boolean canMoveLeft = xPos > 0;
 		boolean canMoveRight = xPos < GamePanel.WIDTH - this.sprite.getWidth(null);
+		this.weapon.tick();
+		this.weapon.setX(this.xPos + this.WIDTH / 2);
 			if (right && canMoveRight) {
 				this.xPos += 5;
 			}
 			if (left && canMoveLeft) {
 				this.xPos -= 5;
 			}
+			if (shooting) {
+				this.weapon.shoot();
+			}
 	}
-
-	public void render(Graphics g) {
-
-		g.drawImage(this.sprite, this.xPos, this.yPos, null);
-
-	}
-
+	
 	public void keyPressed(int k) {
 
 		boolean right = k == KeyEvent.VK_D;
 		boolean left = k == KeyEvent.VK_A;
+		boolean enter = k == KeyEvent.VK_ENTER;
 
 		if (right) {
 			this.right = true;
@@ -52,17 +53,25 @@ public class Player extends Character {
 		if (left) {
 			this.left = true;
 		}
+		if (enter) {
+			this.shooting = true;
+		}
 	}
 
 	public void keyReleased(int k) {
 
 		boolean right = k == KeyEvent.VK_D;
 		boolean left = k == KeyEvent.VK_A;
+		boolean enter = k == KeyEvent.VK_ENTER;
 
 		if (right) {
 			this.right = false;
-		} else if (left) {
+		}
+		if (left) {
 			this.left = false;
+		}
+		if (enter) {
+			this.shooting = false;
 		}
 	}
 }

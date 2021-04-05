@@ -9,8 +9,11 @@ package game.Components;
  *
  * @author david
  */
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
+import javax.imageio.ImageIO;
+import java.io.File;
 
 public abstract class Character {
 	
@@ -23,15 +26,27 @@ public abstract class Character {
 	protected Weapon weapon;
 	protected Image sprite;
 	
-	public Character(int x, int y, int hp, int movementSpeed, String imagePath) {
+	public Character(int x, int y, int hp, int movementSpeed, Weapon weapon, String imagePath) {
 		this.xPos = x;
 		this.yPos = y;
 		this.hp = hp;
 		this.movementSpeed = movementSpeed;
-		this.sprite = Toolkit.getDefaultToolkit().getImage(imagePath);
+		this.weapon = weapon;
+		try {
+			this.sprite = ImageIO.read(new File(imagePath));
+		} catch (Exception e) {
+			e.getStackTrace();
+		}
+		this.WIDTH = this.sprite.getWidth(null);
+		this.HEIGHT = this.sprite.getHeight(null);
 	}
 	
 	public abstract void tick();
+		
+	public void render(Graphics g) {
+		g.drawImage(this.sprite, this.xPos, this.yPos, null);
+		this.weapon.render(g);
+	}
 
 	public int getHp() {
 		return this.hp;
