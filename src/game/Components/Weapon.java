@@ -11,8 +11,6 @@ package game.Components;
  */
 
 import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Toolkit;
 import java.util.ArrayList;
 
 public class Weapon {
@@ -20,22 +18,31 @@ public class Weapon {
 	
 	private int xPos;
 	private int yPos;
-	private Image sprite;
 	private int fireRate;
 	private long lastShot = 0;
 	private boolean canShoot = true;
-	private ArrayList<Projectile> projectileStream;
+	private double fireRatePercent;
+	private final ArrayList<Projectile> projectileStream;
 	private Projectile projectile;
 
 	
-	public Weapon(int x, int y, int fireRate, String imagePath) {
+	public Weapon(int x, int y, int damage, int projectileSpeed, int fireRate, String shootingDirection, String imagePath) {
 		
 		this.xPos = x;
 		this.yPos = y;
 		this.fireRate = fireRate;
-		this.sprite = Toolkit.getDefaultToolkit().getImage(imagePath);
+		this.fireRatePercent = 1;
 		this.projectileStream = new ArrayList<>();
-		this.projectile = new Projectile(x, y, this.sprite);
+		this.projectile = new Projectile(x, y, damage, projectileSpeed, shootingDirection, imagePath);
+	}
+	public Weapon(int x, int y, int damage, int projectileSpeed, double fireRatePercent, String shootingDirection, String imagePath) {
+		
+		this.xPos = x;
+		this.yPos = y;
+		this.fireRate = 1;
+		this.fireRatePercent = fireRatePercent;
+		this.projectileStream = new ArrayList<>();
+		this.projectile = new Projectile(-1000, 1000, damage, projectileSpeed, shootingDirection, imagePath);
 	}
 	public int getX() {
 		return this.xPos;
@@ -54,27 +61,29 @@ public class Weapon {
 		for (int i = 0; i < this.projectileStream.size(); i++) {
 			Projectile thisProjectile = this.projectileStream.get(i);
 			thisProjectile.tick();
-			if (thisProjectile.outOfBounds()) {
+			if (thisProjectile.isOutOfBounds()) {
 				this.deleteProjectile(i);
 			}
 		}
+	}
+	public void newProjectile(int x, int y, int damage, int projectileSpeed, String shootingDirection, String imagePath) {
+		this.projectile = new Projectile(x, y, damage, projectileSpeed, shootingDirection, imagePath);
 	}
 	public void render(Graphics g) {
 		for (Projectile projectile: this.projectileStream) {
 			projectile.render(g);
 		}
 	}
-	
 	public void shoot() {
 		
 		if (!this.canShoot) {
 			long elapsed = System.currentTimeMillis() - this.lastShot;
-			if (elapsed >= 1000 / this.fireRate) {
+			if (elapsed >= (int) 1000 / (this.fireRate * this.fireRatePercent)) {
 				this.canShoot = true;
 			}
 			return;
 		}
-		this.projectileStream.add(new Projectile(this.getX(), this.getY(), this.sprite));
+		this.projectileStream.add(new Projectile(this.getX(), this.getY(), this.projectile.getDamage(), this.projectile.getProjectileSpeed(), this.projectile.getDirection(), this.projectile.getImagePath()));
 		this.lastShot = System.currentTimeMillis();
 		this.canShoot = false;
 	}

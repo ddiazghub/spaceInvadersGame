@@ -17,8 +17,10 @@
             <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/Core/GamePanel.java</file>
             <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/Components/Player.java</file>
             <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/GameStateLogic/PauseMenuState.java</file>
+            <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/Components/Enemies/InvaderGroup.java</file>
             <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/GameStateLogic/ConfigMenuState.java</file>
             <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/Components/Enemy.java</file>
+            <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/Components/Enemies/Invader.java</file>
             <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/Core/Game.java</file>
             <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/GameStateLogic/GameOverState.java</file>
             <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/Components/PointsCounter.java</file>

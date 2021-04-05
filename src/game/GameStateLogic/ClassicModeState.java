@@ -11,9 +11,12 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.awt.event.KeyEvent;
+import game.Components.Enemies.InvaderGroup;
 import game.Components.Player;
+import game.Components.Enemy;
 import game.Components.Weapon;
+import java.awt.event.KeyEvent;
+
 
 /**
  *
@@ -24,6 +27,7 @@ public class ClassicModeState extends GameState{
 	private String[] options = {"Clásico", "Campaña", "Survival", "Multijugador"};
 	private int currentSelection = 0;
 	private Player player;
+	private InvaderGroup invaders;
 
 	public ClassicModeState(GameStateManager stateManager) {
 		super(stateManager);
@@ -31,12 +35,14 @@ public class ClassicModeState extends GameState{
 	}
 
 	public void init() {
-		Weapon base = new Weapon(100, 100, 5, "./src/game/Graphics/Player/disparo.png");
+		Weapon base = new Weapon(-1000, 1000, 1, 6, 5, "up", "./src/game/Graphics/Player/disparo.png");
+		this.invaders = new InvaderGroup(10, 60, 5, 8);
 		this.player = new Player(GamePanel.WIDTH / 2, GamePanel.HEIGHT - 100, 1, 1, base, "./src/game/Graphics/Player/nave2.png");
 	}
 
 	public void tick() {
 		this.player.tick();
+		this.invaders.tick();
 	}
 
 	public void render(Graphics g) {
@@ -45,10 +51,19 @@ public class ClassicModeState extends GameState{
 		g.drawImage(background, 0, 0, null);
 
 		this.player.render(g);
+		this.invaders.render(g);
+	}
+	
+	public void moveEnemy() {
+		
 	}
 
 	public void keyPressed(int k) {
 		this.player.keyPressed(k);
+		boolean esc = k == KeyEvent.VK_ESCAPE;
+		if (esc) {
+			this.stateManager.pushState(new PauseMenuState(this.stateManager));
+		}
 	}
 
 	public void keyReleased(int k) {

@@ -8,7 +8,8 @@ package game.Components;
 import game.Core.GamePanel;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Toolkit;
+import java.io.File;
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -21,12 +22,28 @@ public class Projectile {
 	private int xPos;
 	private int yPos;
 	private Image sprite;
+	private int damage;
+	private int projectileSpeed;
+	private int width;
+	private int height;
+	private String direction;
+	private String imagePath;
 	
-	public Projectile(int x, int y, Image sprite) {
+	public Projectile(int x, int y, int damage, int projectileSpeed, String direction, String imagePath) {
 		
 		this.xPos = x;
 		this.yPos = y;
-		this.sprite = sprite;
+		this.damage = damage;
+		this.projectileSpeed = projectileSpeed;
+		this.imagePath = imagePath;
+		this.direction = direction;
+		try {
+			this.sprite = ImageIO.read(new File(this.imagePath));
+		} catch (Exception e) {
+			e.getStackTrace();
+		}
+		this.width = this.sprite.getWidth(null);
+		this.height = this.sprite.getHeight(null);
 	}
 	public int getX() {
 		return this.xPos;
@@ -34,13 +51,43 @@ public class Projectile {
 	public int getY() {
 		return this.yPos;
 	}
+	public int getDamage() {
+		return this.damage;
+	}
+	public String getDirection() {
+		return this.direction;
+	}
+	public String getImagePath() {
+		return this.imagePath;
+	}
+	public int getWidth() {
+		return this.width;
+	}
+	public int getHeight() {
+		return this.height;
+	}
+	public void setDamage(int damage) {
+		this.damage = damage;
+	}
+	public int getProjectileSpeed() {
+		return this.projectileSpeed;
+	}
+	public void travel() {
+		switch (direction) {
+			case "up":
+				this.yPos -= this.projectileSpeed;
+				break;
+			case "down":
+				this.yPos += this.projectileSpeed;
+		}
+	}
 	public void tick() {
-		this.yPos -= 10;
+		this.travel();
 	}
 	public void render(Graphics g) {
 		g.drawImage(sprite, xPos, yPos, null);
 	}
-	public boolean outOfBounds() {
+	public boolean isOutOfBounds() {
 		return this.xPos < -300 || this.xPos > 300 + GamePanel.WIDTH || this.yPos < -300 || this.xPos > 300 + GamePanel.HEIGHT;
 	}
 }

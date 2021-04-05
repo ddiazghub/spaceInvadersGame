@@ -19,7 +19,7 @@ import java.awt.event.KeyEvent;
  */
 public class GMSelectState extends GameState {
 
-	private String[] options = {"Clásico", "loren ipsum", "Multijugador"};
+	private String[] options = {"Clásico", "No se", "Multijugador"};
 	private int currentSelection = 0;
 
 	public GMSelectState(GameStateManager stateManager) {
