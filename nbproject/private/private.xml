@@ -11,6 +11,8 @@
             <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/GameStateLogic/GameStateManager.java</file>
             <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/GameStateLogic/AboutState.java</file>
             <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/GameStateLogic/GMSelectState.java</file>
+            <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/Components/ScoreCounter.java</file>
+            <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/Graphics/Player/DurrrSpaceShip.png</file>
             <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/Components/Projectile.java</file>
             <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/GameStateLogic/GameState.java</file>
             <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/Components/Weapon.java</file>
@@ -23,7 +25,6 @@
             <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/Components/Enemies/Invader.java</file>
             <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/Core/Game.java</file>
             <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/GameStateLogic/GameOverState.java</file>
-            <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/Components/PointsCounter.java</file>
             <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/Core/GlobalOptions.java</file>
             <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/GameStateLogic/MultiplayerModeState.java</file>
         </group>
