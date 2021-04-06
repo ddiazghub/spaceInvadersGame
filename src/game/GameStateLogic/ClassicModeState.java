@@ -49,6 +49,25 @@ public class ClassicModeState extends GameState{
 
 		Image background = Toolkit.getDefaultToolkit().getImage("./src/game/Graphics/background.png");
 		g.drawImage(background, 0, 0, null);
+                
+                Image vida = Toolkit.getDefaultToolkit().getImage("./src/game/Graphics/vida.png");
+		g.drawImage(vida, 90, 13,null);
+                
+                Image vida2 = Toolkit.getDefaultToolkit().getImage("./src/game/Graphics/vida.png");
+		g.drawImage(vida2, 120, 13,null);
+                
+                Image vida3 = Toolkit.getDefaultToolkit().getImage("./src/game/Graphics/vida.png");
+		g.drawImage(vida3, 150, 13,null);
+                
+                 for(int i = 0; i < this.options.length; i++) {
+
+                     g.setFont(new Font("Arial", Font.PLAIN, 30));
+		g.setColor(new Color(51, 175, 255));
+		
+		g.drawString("Score:", 450, 10 + g.getFontMetrics().getHeight() - 10);
+                g.drawString("Lives:", 10, 10 + g.getFontMetrics().getHeight() - 10);
+		}
+
 
 		this.player.render(g);
 		this.invaders.render(g);
