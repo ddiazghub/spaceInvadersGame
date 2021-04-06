@@ -39,7 +39,7 @@ public class Invader extends Enemy {
 
 	public Invader(int x, int y, int moveFrecuency, int moveDelta, int movementRepetitions) {
 
-		super(x, y, 1, 3, new Weapon(-1000, 1000, 1, 5, 1, "down", "./src/game/Graphics/Player/disparo.png"), "base", "./src/game/Graphics/Enemies/alienB.png");
+		super(x, y, 1, 3, new Weapon(-1000, 1000, 1, 5, 3, "down", "./src/game/Graphics/Player/disparo.png"), "base", "./src/game/Graphics/Enemies/alienB.png");
 
 		this.moveDelta = moveDelta;
 		this.right = true;

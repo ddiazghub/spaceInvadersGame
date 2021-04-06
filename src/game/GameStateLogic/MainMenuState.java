@@ -20,10 +20,11 @@ import java.awt.event.KeyEvent;
 public class MainMenuState extends GameState {
 	
 	private String[] options = {"Jugar", "Configuración", "Acerca del juego", "Cerrar juego"};
-	private int currentSelection = 0;
+	private int currentSelection;
 	
 	public MainMenuState(GameStateManager stateManager) {
 		super(stateManager);
+		this.currentSelection = 0;
 	}
 	
 	public void init() {}
@@ -36,6 +37,7 @@ public class MainMenuState extends GameState {
 		
 		Image background = Toolkit.getDefaultToolkit().getImage("./src/game/Graphics/background.png");
 		Image logo = Toolkit.getDefaultToolkit().getImage("./src/game/Graphics/logo.png");
+		Image alien = Toolkit.getDefaultToolkit().getImage("./src/game/Graphics/Enemies/alienY.png");
 	
 		//Creando el fondo
 		g.drawImage(background, 0, 0, null);
@@ -43,17 +45,17 @@ public class MainMenuState extends GameState {
 		
 		g.drawImage(logo, GamePanel.WIDTH / 2 - logo.getWidth(null) / 2, -110, null);
 	
+		g.setFont(new Font("Arial", Font.PLAIN, 40));
 		
 		for(int i = 0; i < this.options.length; i++) {
 			
 			boolean selected = i == this.currentSelection;
 			if (selected) {
-				g.setColor(Color.GREEN);
+				g.setColor(Color.YELLOW);
+				g.drawImage(alien, GamePanel.WIDTH / 2 - alien.getWidth(null) / 2 - g.getFontMetrics().stringWidth(this.options[i]) / 2 - 50, 380 + i * 50 - alien.getHeight(null) / 2 , null);
 			}	else {
 				g.setColor(Color.WHITE);
 			}
-			
-			g.setFont(new Font("Arial", Font.PLAIN, 40));
 			g.drawString(this.options[i], GamePanel.WIDTH / 2 - g.getFontMetrics().stringWidth(this.options[i]) / 2, 390 + i * 50);
 		}
 	}

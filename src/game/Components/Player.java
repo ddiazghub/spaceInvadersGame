@@ -18,6 +18,7 @@ public class Player extends Character {
 	private boolean right = false;
 	private boolean left = false;
 	private boolean shooting = false;
+	private int lives;
 
 	public Player(int x, int y, int hp, int movementSpeed, Weapon weapon, String imagePath) {
 

@@ -13,21 +13,19 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import game.Components.Enemies.InvaderGroup;
 import game.Components.Player;
-import game.Components.Enemy;
 import game.Components.Weapon;
 import java.awt.event.KeyEvent;
-
+import game.Components.ScoreCounter;
 
 /**
  *
  * @author david
  */
-public class ClassicModeState extends GameState{
+public class ClassicModeState extends GameState {
 
-	private String[] options = {"Clásico", "Campaña", "Survival", "Multijugador"};
-	private int currentSelection = 0;
 	private Player player;
 	private InvaderGroup invaders;
+	private ScoreCounter score;
 
 	public ClassicModeState(GameStateManager stateManager) {
 		super(stateManager);
@@ -35,9 +33,10 @@ public class ClassicModeState extends GameState{
 	}
 
 	public void init() {
-		Weapon base = new Weapon(-1000, 1000, 1, 6, 5, "up", "./src/game/Graphics/Player/disparo.png");
-		this.invaders = new InvaderGroup(10, 60, 5, 8);
+		Weapon base = new Weapon(-1000, 1000, 1, 6, 2, "up", "./src/game/Graphics/Player/disparo.png");
+		this.invaders = new InvaderGroup(10, 100, 6, 9);
 		this.player = new Player(GamePanel.WIDTH / 2, GamePanel.HEIGHT - 100, 1, 1, base, "./src/game/Graphics/Player/nave2.png");
+		this.score = new ScoreCounter();
 	}
 
 	public void tick() {
@@ -48,33 +47,23 @@ public class ClassicModeState extends GameState{
 	public void render(Graphics g) {
 
 		Image background = Toolkit.getDefaultToolkit().getImage("./src/game/Graphics/background.png");
+		Image vida = Toolkit.getDefaultToolkit().getImage("./src/game/Graphics/vida.png");
 		g.drawImage(background, 0, 0, null);
-                
-                Image vida = Toolkit.getDefaultToolkit().getImage("./src/game/Graphics/vida.png");
-		g.drawImage(vida, 90, 13,null);
-                
-                Image vida2 = Toolkit.getDefaultToolkit().getImage("./src/game/Graphics/vida.png");
-		g.drawImage(vida2, 120, 13,null);
-                
-                Image vida3 = Toolkit.getDefaultToolkit().getImage("./src/game/Graphics/vida.png");
-		g.drawImage(vida3, 150, 13,null);
-                
-                 for(int i = 0; i < this.options.length; i++) {
-
-                     g.setFont(new Font("Arial", Font.PLAIN, 30));
-		g.setColor(new Color(51, 175, 255));
-		
-		g.drawString("Score:", 450, 10 + g.getFontMetrics().getHeight() - 10);
-                g.drawString("Lives:", 10, 10 + g.getFontMetrics().getHeight() - 10);
-		}
-
 
 		this.player.render(g);
 		this.invaders.render(g);
-	}
-	
-	public void moveEnemy() {
 		
+		g.drawImage(vida, 90, 13, null);
+		g.drawImage(vida, 120, 13, null);
+		g.drawImage(vida, 150, 13, null);
+		g.setFont(new Font("Arial", Font.PLAIN, 30));
+		g.setColor(new Color(51, 175, 255));
+		g.drawString("Score: " + this.score.getScore(), 450, 10 + g.getFontMetrics().getHeight() - 10);
+		g.drawString("Lives:", 10, 10 + g.getFontMetrics().getHeight() - 10);
+	}
+
+	public void moveEnemy() {
+
 	}
 
 	public void keyPressed(int k) {

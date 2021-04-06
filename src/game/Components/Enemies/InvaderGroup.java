@@ -28,7 +28,7 @@ public class InvaderGroup {
 		this.bottomInvaders = new ArrayList<>();
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < columns; j++) {
-				this.invaders.add(new Invader(100 + j * (GamePanel.WIDTH / 10 - 25), 10 + i * (GamePanel.HEIGHT / 10 - 10), 3, GamePanel.WIDTH / 30, 7));
+				this.invaders.add(new Invader(x + j * (GamePanel.WIDTH / 10 - 25), j + i * (GamePanel.HEIGHT / 10 - 10), 1, GamePanel.WIDTH / 30, 9));
 			}
 		}
 		for (int i = this.invaders.size() - 1 - columns; i < this.invaders.size() - 1; i++) {

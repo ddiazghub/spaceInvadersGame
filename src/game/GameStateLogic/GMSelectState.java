@@ -36,6 +36,7 @@ public class GMSelectState extends GameState {
 	public void render(Graphics g) {
 
 		Image background = Toolkit.getDefaultToolkit().getImage("./src/game/Graphics/background.png");
+		Image alien = Toolkit.getDefaultToolkit().getImage("./src/game/Graphics/Enemies/alienY.png");
 		g.drawImage(background, 0, 0, null);
 
 		g.setColor(new Color(51, 175, 255));
@@ -47,14 +48,15 @@ public class GMSelectState extends GameState {
 
 		for (int i = 0; i < this.options.length; i++) {
 
+			g.setFont(new Font("Arial", Font.PLAIN, 30));
 			boolean selected = i == this.currentSelection;
 			if (selected) {
-				g.setColor(Color.GREEN);
+				g.setColor(Color.YELLOW);
+				g.drawImage(alien, GamePanel.WIDTH / 2 - alien.getWidth(null) / 2 - g.getFontMetrics().stringWidth(this.options[i]) / 2 - 50, 420 + i * 50 - alien.getHeight(null) / 2 , null);
 			} else {
 				g.setColor(Color.WHITE);
 			}
 
-			g.setFont(new Font("Arial", Font.PLAIN, 30));
 			g.drawString(this.options[i], GamePanel.WIDTH / 2 - g.getFontMetrics().stringWidth(this.options[i]) / 2, 430 + i * (g.getFontMetrics().getHeight() + 15));
 		}
 		g.setFont(new Font("Arial", Font.BOLD, 45));

@@ -36,17 +36,19 @@ public class ConfigMenuState extends GameState {
 	
 	
 		Image background = Toolkit.getDefaultToolkit().getImage("./src/game/Graphics/background.png");
+		Image alien = Toolkit.getDefaultToolkit().getImage("./src/game/Graphics/Enemies/alienY.png");
 		g.drawImage(background, 0, 0, null);
 		
+		g.setFont(new Font("Arial", Font.PLAIN, 20));
 		for(int i = 0; i < this.options.length; i++) {
 			
 			boolean selected = i == this.currentSelection;
 			if (selected) {
-				g.setColor(Color.GREEN);
+				g.setColor(Color.YELLOW);
+				g.drawImage(alien, 110, 165 + i * (g.getFontMetrics().getHeight() + 10) - alien.getHeight(null) / 2, null);
 			}	else {
 				g.setColor(Color.WHITE);
 			}
-			g.setFont(new Font("Arial", Font.PLAIN, 20));
 			g.drawString(this.options[i], 280, 165 + i * (g.getFontMetrics().getHeight() + 10));
 		}
 		g.setColor(Color.WHITE);
