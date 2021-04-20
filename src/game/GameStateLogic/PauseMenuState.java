@@ -19,7 +19,7 @@ import java.awt.event.KeyEvent;
  */
 public class PauseMenuState extends GameState {
 	
-	private String[] options = {"Jugar", "Configuración", "Acerca del juego", "Cerrar juego"};
+	private String[] options = {"Volver al juego", "Configuración", "Acerca del juego", "Salir al menú principal"};
 	private int currentSelection = 0;
 	
 	public PauseMenuState(GameStateManager stateManager) {
@@ -40,8 +40,9 @@ public class PauseMenuState extends GameState {
 		//Creando el fondo
 		g.drawImage(background, 0, 0, null);
 		
-		
-		g.drawImage(logo, GamePanel.WIDTH / 2 - logo.getWidth(null) / 2, -110, null);
+		g.setColor(Color.WHITE);
+		g.setFont(new Font("Arial", Font.PLAIN, 70));
+		g.drawString("Pausa", GamePanel.WIDTH / 2 - g.getFontMetrics().stringWidth("Pausa") / 2, 200);
 	
 		
 		for(int i = 0; i < this.options.length; i++) {
@@ -75,7 +76,7 @@ public class PauseMenuState extends GameState {
 		} else if (enter) {
 			switch (this.currentSelection) {
 				case 0:
-					stateManager.pushState(new GMSelectState(stateManager));
+					stateManager.popState();
 					break;
 				case 1:
 					stateManager.pushState(new ConfigMenuState(stateManager));
@@ -84,7 +85,7 @@ public class PauseMenuState extends GameState {
 					stateManager.pushState(new AboutState(stateManager));
 					break;
 				case 3:
-					System.exit(0);
+					stateManager.pushState(new MainMenuState(stateManager));
 			}
 		}
 	}

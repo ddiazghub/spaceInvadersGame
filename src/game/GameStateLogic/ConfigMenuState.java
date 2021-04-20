@@ -28,9 +28,12 @@ public class ConfigMenuState extends GameState {
 	
 	public void init() {}
 	
+	
 	public void tick() {
 		
 	}
+	
+	
 	
 	public void render(Graphics g) {
 	
@@ -65,6 +68,8 @@ public class ConfigMenuState extends GameState {
 		g.setColor(Color.WHITE);
 		g.drawString("Volver al menu principal (ESC)", 10, g.getFontMetrics().getHeight() + 10);
 	}
+	
+	
 	
 	public void keyPressed(int k) {
 		boolean down = k == KeyEvent.VK_S;
