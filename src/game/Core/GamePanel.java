@@ -74,7 +74,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	}
 	
 	public void tick(long elapsedTime) {
-		System.out.println("Running, Elapsed Time: " + elapsedTime);
+		// System.out.println("Running, Elapsed Time: " + elapsedTime);
 		this.stateManager.tick();
 	}
 	

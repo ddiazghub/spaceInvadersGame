@@ -19,6 +19,7 @@ public class Weapon {
 	private int xPos;
 	private int yPos;
 	private int fireRate;
+	private final GameTimer timer;
 	private long lastShot = 0;
 	private boolean canShoot = true;
 	private double fireRatePercent;
@@ -34,6 +35,9 @@ public class Weapon {
 		this.fireRatePercent = 1;
 		this.projectileStream = new ArrayList<>();
 		this.projectile = new Projectile(x, y, damage, projectileSpeed, shootingDirection, imagePath);
+		this.timer = new GameTimer();
+		this.timer.newDelay(1000 / (this.fireRate * this.fireRatePercent));
+		
 	}
 	public Weapon(int x, int y, int damage, int projectileSpeed, double fireRatePercent, String shootingDirection, String imagePath) {
 		
@@ -43,6 +47,8 @@ public class Weapon {
 		this.fireRatePercent = fireRatePercent;
 		this.projectileStream = new ArrayList<>();
 		this.projectile = new Projectile(-1000, 1000, damage, projectileSpeed, shootingDirection, imagePath);
+		this.timer = new GameTimer();
+		this.timer.newDelay(1000 / (this.fireRate * this.fireRatePercent));
 	}
 	public int getX() {
 		return this.xPos;
@@ -75,22 +81,44 @@ public class Weapon {
 		}
 	}
 	public void shoot() {
-		
-		if (!this.canShoot) {
-			long elapsed = System.currentTimeMillis() - this.lastShot;
-			if (elapsed >= (int) 1000 / (this.fireRate * this.fireRatePercent)) {
-				this.canShoot = true;
-			}
-			return;
+		if (this.timer.delayFinished()) {
+			this.projectileStream.add(new Projectile(this.getX(), this.getY(), this.projectile.getDamage(), this.projectile.getSpeedY(), this.projectile.getDirection(), this.projectile.getSprite()));
+			this.timer.reset();
 		}
-		this.projectileStream.add(new Projectile(this.getX(), this.getY(), this.projectile.getDamage(), this.projectile.getProjectileSpeed(), this.projectile.getDirection(), this.projectile.getImagePath()));
-		this.lastShot = System.currentTimeMillis();
-		this.canShoot = false;
 	}
 	
 	public void deleteProjectile(int i) {
+		this.projectileStream.set(i, null);
 		this.projectileStream.remove(i);
 	}
+	
+	public int getDamage() {
+		return this.projectile.getDamage();
+	}
+	
+	public ArrayList<Projectile> getProjectileStream() {
+		return this.projectileStream;
+	}
+	
+	public void collision(CharacterEntity entity) {
+		for (int i = 0; i < this.projectileStream.size(); i++) {
+			if (entity.getBounds().intersects(this.projectileStream.get(i).getBounds())) {
+				entity.hurt(this.projectileStream.get(i).getDamage());
+				this.deleteProjectile(i);
+			}
+		}
+	}
+	/*
+	public void collision(Invader invader) {
+		for (int i = 0; i < this.projectileStream.size(); i++) {
+			if (invader.getBounds().intersects(this.projectileStream.get(i).getBounds())) {
+				invader.hurt(this.projectileStream.get(i).getDamage());
+				this.deleteProjectile(i);
+				System.out.println("COLLISION DETECTED");
+			}
+		}
+	}
+	*/
 }
 
 /*

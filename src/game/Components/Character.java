@@ -10,56 +10,39 @@ package game.Components;
  * @author david
  */
 import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Toolkit;
-import javax.imageio.ImageIO;
-import java.io.File;
 
-public abstract class Character {
+public abstract class Character extends Entity implements CharacterEntity {
 	
 	protected int hp;
-	protected int movementSpeed;
-	protected int WIDTH;
-	protected int HEIGHT;
-	protected int xPos;
-	protected int yPos;
 	protected boolean hasWeapon;
 	protected Weapon weapon;
-	protected Image sprite;
-	protected double movementSpeedPercent;
+	protected boolean shooting;
+	protected boolean right;
+	protected boolean left;
+	protected double speedPercentX;
+	protected double speedPercentY;
+	protected boolean dead = false;
 	
-	public Character(int x, int y, int hp, int movementSpeed, Weapon weapon, String imagePath) {
-		this.xPos = x;
-		this.yPos = y;
+	public Character(int x, int y, int hp, int xSpeed, int ySpeed, Weapon weapon, String imagePath) {
+		super(x, y, imagePath);
 		this.hp = hp;
-		this.movementSpeed = movementSpeed;
+		this.xSpeed = xSpeed;
+		this.ySpeed = ySpeed;
 		this.hasWeapon = weapon != null;
 		this.weapon = weapon;
-		try {
-			this.sprite = ImageIO.read(new File(imagePath));
-		} catch (Exception e) {
-			e.getStackTrace();
-		}
-		this.WIDTH = this.sprite.getWidth(null);
-		this.HEIGHT = this.sprite.getHeight(null);
-		this.movementSpeedPercent = 1;
+		this.speedPercentX = 1;
+		this.speedPercentY = 1;
 	}
 	
-	public Character(int x, int y, int hp, double movementSpeedPercent, Weapon weapon, String imagePath) {
-		this.xPos = x;
-		this.yPos = y;
+	public Character(int x, int y, int hp, double xSpeed, double ySpeed, Weapon weapon, String imagePath) {
+		super(x, y, imagePath);
 		this.hp = hp;
-		this.movementSpeed = movementSpeed;
-		this.movementSpeedPercent = movementSpeedPercent;
+		this.xSpeed = 1;
+		this.ySpeed = 1;
+		this.speedPercentX = xSpeed;
+		this.speedPercentY = ySpeed;
 		this.hasWeapon = weapon != null;
 		this.weapon = weapon;
-		try {
-			this.sprite = ImageIO.read(new File(imagePath));
-		} catch (Exception e) {
-			e.getStackTrace();
-		}
-		this.WIDTH = this.sprite.getWidth(null);
-		this.HEIGHT = this.sprite.getHeight(null);
 	}
 	
 	public abstract void tick();
@@ -75,36 +58,20 @@ public abstract class Character {
 		return this.hp;
 	}
 
-	public int getMovementSpeed() {
-		return this.movementSpeed;
-	}
-
-	public int getWIDTH() {
-		return this.WIDTH;
-	}
-	
-	public int getX() {
-		return this.xPos;
-	}
-	
-	public int getY() {
-		return this.yPos;
-	}
-
-	public int getHEIGHT() {
-		return this.HEIGHT;
-	}
-
-	public Image getSprite() {
-		return sprite;
-	}
-
-	public void setSprite(String imagePath) {
-		this.sprite = Toolkit.getDefaultToolkit().getImage(imagePath);
+	public Weapon getWeapon() {
+		return this.weapon;
 	}
 	
 	public void hurt(int damage) {
 		this.hp -= damage;
+		boolean dead = this.hp < 1;
+		if (dead) {
+			this.kill();
+		}
+	}
+	
+	public boolean isDead() {
+		return this.dead;
 	}
 	
 	public void heal(int hp) {
@@ -112,6 +79,6 @@ public abstract class Character {
 	}
 	
 	public void kill() {
-	
+		this.dead = true;
 	}
 }

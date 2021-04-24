@@ -16,6 +16,53 @@ import java.util.Random;
 
 public class Invader extends Enemy {
 
+	private int row;
+	private int xDir;
+	public Invader(int x, int y, int initialRow) {
+		super(x, y, 1, 5, 3, 10, new Weapon(-1000, 1000, 1, 4, 0.5, "down", "./src/game/Graphics/Player/disparo.png"), "base", "./src/game/Graphics/Enemies/alienB.png");
+		this.row = initialRow;
+		this.xDir = 1;
+	}
+	
+	public void tick() {
+		if (this.stopped) return;
+		this.move();
+		if (this.hasWeapon) {
+			this.weapon.tick();
+			this.weapon.setX(this.xPos + this.width / 2);
+			this.weapon.setY(this.yPos + this.height);
+			if (this.shooting) shoot();
+		}
+	}
+	
+	public void move() {
+		this.xPos += this.xSpeed*this.xDir;
+	}
+	
+	public void reverseDirection() {
+		this.yPos += GamePanel.HEIGHT / 16;
+		this.xDir *= -1;
+		this.row++;
+	}
+	
+	public void shoot() {
+		Random random = new Random();
+		double rand = random.nextFloat();
+		double chance = 0.1;
+		if (rand > 1 - chance) {
+			this.weapon.shoot();
+		}
+	}
+	
+	public int getRow() {
+		return this.row;
+	}
+	
+	public void allowShooting() {
+		this.shooting = true;
+	}
+	
+	/*
 	private int moveFrecuency;
 	private int moveDelta;
 	private boolean canMoveLeft;
@@ -23,10 +70,12 @@ public class Invader extends Enemy {
 	private boolean fixedMovementX;
 	private int movementRepetitions;
 	private int movementCounter;
+	private boolean changedDirection = false;
+	private int row;
 
-	public Invader(int x, int y, int moveFrecuency, int moveDelta) {
+	public Invader(int x, int y, int moveFrecuency, int moveDelta, int initialRow) {
 
-		super(x, y, 1, 3, new Weapon(-1000, 1000, 1, 4, 0.5, "down", "./src/game/Graphics/Player/disparo.png"), "base", "./src/game/Graphics/Enemies/alienB.png");
+		super(x, y, 1, 5, 3, 10, new Weapon(-1000, 1000, 1, 4, 0.5, "down", "./src/game/Graphics/Player/disparo.png"), "base", "./src/game/Graphics/Enemies/alienB.png");
 
 		this.moveDelta = moveDelta;
 		this.right = true;
@@ -35,11 +84,12 @@ public class Invader extends Enemy {
 		this.canMoveLeft = this.xPos > 0;
 		this.canMoveRight = this.xPos < GamePanel.WIDTH - this.sprite.getWidth(null);
 		this.fixedMovementX = false;
+		this.row = initialRow;
 	}
 
-	public Invader(int x, int y, int moveFrecuency, int moveDelta, int movementRepetitions) {
-
-		super(x, y, 1, 3, new Weapon(-1000, 1000, 1, 5, 3, "down", "./src/game/Graphics/Player/disparo.png"), "base", "./src/game/Graphics/Enemies/alienB.png");
+	public Invader(int x, int y, int moveFrecuency, int moveDelta, int movementRepetitions, int initialRow) {
+		
+		super(x, y, 1, 3, 3, 10, new Weapon(-1000, 1000, 1, 5, 3, "down", "./src/game/Graphics/Player/disparo.png"), "base", "./src/game/Graphics/Enemies/alienB.png");
 
 		this.moveDelta = moveDelta;
 		this.right = true;
@@ -50,6 +100,7 @@ public class Invader extends Enemy {
 		this.fixedMovementX = true;
 		this.movementRepetitions = movementRepetitions;
 		this.movementCounter = 0;
+		this.row = initialRow;
 	}
 
 	public void tick() {
@@ -57,8 +108,8 @@ public class Invader extends Enemy {
 		this.move();
 		if (this.hasWeapon) {
 			this.weapon.tick();
-			this.weapon.setX(this.xPos + this.WIDTH / 2);
-			this.weapon.setY(this.yPos + this.HEIGHT);
+			this.weapon.setX(this.xPos + this.width / 2);
+			this.weapon.setY(this.yPos + this.height);
 		}
 
 	}
@@ -110,13 +161,10 @@ public class Invader extends Enemy {
 	public void moveRight() {
 		if (!this.fixedMovementX) {
 			if (canMoveRight) {
-				this.xPos += this.movementSpeed * this.movementSpeedPercent;
-				this.lastMovedRight = true;
+				this.xPos += this.xSpeed * this.speedPercentX;
 			} else {
-				this.right = false;
-				this.down = true;
-				this.allowMovement = false;
-				this.lastMoveTime = System.currentTimeMillis();
+				this.changedDirection = true;
+				changeDirection();
 			}
 			if (this.xPos - this.lastMoveX >= this.moveDelta) {
 				this.allowMovement = false;
@@ -124,7 +172,7 @@ public class Invader extends Enemy {
 			}
 		} else {
 			if (this.movementCounter <= this.movementRepetitions) {
-				this.xPos += this.movementSpeed * this.movementSpeedPercent;
+				this.xPos += this.xSpeed * this.speedPercentX;
 				this.lastMovedRight = true;
 			} else {
 				this.right = false;
@@ -143,13 +191,10 @@ public class Invader extends Enemy {
 	public void moveLeft() {
 		if (!this.fixedMovementX) {
 			if (this.canMoveLeft) {
-				this.xPos -= this.movementSpeed * this.movementSpeedPercent;
-				this.lastMovedRight = false;
+				this.xPos -= this.xSpeed * this.speedPercentX;
 			} else {
-				this.left = false;
-				this.down = true;
-				this.allowMovement = false;
-				this.lastMoveTime = System.currentTimeMillis();
+				this.changedDirection = true;
+				changeDirection();
 			}
 			if (this.lastMoveX - this.xPos >= this.moveDelta) {
 				this.allowMovement = false;
@@ -157,7 +202,7 @@ public class Invader extends Enemy {
 			}
 		} else {
 			if (this.movementCounter <= this.movementRepetitions) {
-				this.xPos -= this.movementSpeed * this.movementSpeedPercent;
+				this.xPos -= this.xSpeed * this.speedPercentX;;
 				this.lastMovedRight = false;
 			} else {
 				this.left = false;
@@ -174,7 +219,7 @@ public class Invader extends Enemy {
 	}
 
 	public void moveDown() {
-		this.yPos += this.movementSpeed * this.movementSpeedPercent;
+		this.yPos += this.ySpeed * this.speedPercentY;
 		if (this.yPos - this.lastMoveY >= this.moveDelta) {
 			if (this.lastMovedRight) {
 				this.allowMovement = false;
@@ -190,28 +235,44 @@ public class Invader extends Enemy {
 			if (this.fixedMovementX) {
 				this.movementCounter = 0;
 			}
+			this.row++;
 		}
 	}
 
-	public void followX(Invader invader) {
-		this.yPos = invader.getY();
+	public void changeDirection() {
+		this.left = !this.left;
+		this.right = !this.right;
+		this.yPos += this.moveDelta;
+		this.allowMovement = false;
+		this.lastMoveTime = System.currentTimeMillis();
+		this.row++;
 	}
-
-	public void followY(Invader invader) {
-		this.xPos = invader.getX();
+	
+	public boolean changedDirection() {
+		boolean answer = this.changedDirection;
+		this.changedDirection = false;
+		return answer;
 	}
 
 	public boolean movedDown() {
 		return this.down;
 	}
+	
+	public void setDown() {
+		this.down = true;
+	}
 
 	public void shoot() {
 		Random random = new Random();
 		double rand = random.nextFloat();
-		double chance = 0.01;
+		double chance = 0.1;
 		if (rand > 1 - chance) {
 			this.weapon.shoot();
 		}
+	}
+	
+	public int getRow() {
+		return this.row;
 	}
 	
 	public void toggleShooting() {
@@ -229,4 +290,5 @@ public class Invader extends Enemy {
 	public boolean canMove() {
 		return this.allowMovement;
 	}
+*/
 }

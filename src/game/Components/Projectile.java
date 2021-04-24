@@ -8,8 +8,6 @@ package game.Components;
 import game.Core.GamePanel;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.io.File;
-import javax.imageio.ImageIO;
 
 /**
  *
@@ -17,39 +15,26 @@ import javax.imageio.ImageIO;
  */
 
 
-public class Projectile {
+public class Projectile extends Entity {
 	
-	private int xPos;
-	private int yPos;
-	private Image sprite;
 	private int damage;
-	private int projectileSpeed;
 	private int width;
 	private int height;
 	private String direction;
-	private String imagePath;
 	
 	public Projectile(int x, int y, int damage, int projectileSpeed, String direction, String imagePath) {
-		
-		this.xPos = x;
-		this.yPos = y;
+		super(x, y, imagePath);
 		this.damage = damage;
-		this.projectileSpeed = projectileSpeed;
-		this.imagePath = imagePath;
+		this.xSpeed = 0;
+		this.ySpeed = projectileSpeed;
 		this.direction = direction;
-		try {
-			this.sprite = ImageIO.read(new File(this.imagePath));
-		} catch (Exception e) {
-			e.getStackTrace();
-		}
-		this.width = this.sprite.getWidth(null);
-		this.height = this.sprite.getHeight(null);
 	}
-	public int getX() {
-		return this.xPos;
-	}
-	public int getY() {
-		return this.yPos;
+	public Projectile(int x, int y, int damage, int projectileSpeed, String direction, Image sprite) {
+		super(x, y, sprite);
+		this.damage = damage;
+		this.xSpeed = 0;
+		this.ySpeed = projectileSpeed;
+		this.direction = direction;
 	}
 	public int getDamage() {
 		return this.damage;
@@ -57,31 +42,20 @@ public class Projectile {
 	public String getDirection() {
 		return this.direction;
 	}
-	public String getImagePath() {
-		return this.imagePath;
-	}
-	public int getWidth() {
-		return this.width;
-	}
-	public int getHeight() {
-		return this.height;
-	}
 	public void setDamage(int damage) {
 		this.damage = damage;
-	}
-	public int getProjectileSpeed() {
-		return this.projectileSpeed;
 	}
 	public void travel() {
 		switch (direction) {
 			case "up":
-				this.yPos -= this.projectileSpeed;
+				this.yPos -= this.ySpeed;
 				break;
 			case "down":
-				this.yPos += this.projectileSpeed;
+				this.yPos += this.ySpeed;
 		}
 	}
 	public void tick() {
+		if (this.stopped) return;
 		this.travel();
 	}
 	public void render(Graphics g) {

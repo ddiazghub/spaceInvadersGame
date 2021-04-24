@@ -48,7 +48,6 @@ public class MainMenuState extends GameState {
 		g.setFont(new Font("Arial", Font.PLAIN, 40));
 		
 		for(int i = 0; i < this.options.length; i++) {
-			
 			boolean selected = i == this.currentSelection;
 			if (selected) {
 				g.setColor(Color.YELLOW);

@@ -37,14 +37,22 @@ public class GameOverState extends GameState {
 	public void render(Graphics g) {
 
 		Image background = Toolkit.getDefaultToolkit().getImage("./src/game/Graphics/background.png");
+		Image alien = Toolkit.getDefaultToolkit().getImage("./src/game/Graphics/Enemies/alienY.png");
 		g.drawImage(background, 0, 0, null);
 
 		g.setColor(Color.RED);
 		g.setFont(new Font("Arial", Font.BOLD, 70));
 		g.drawString(this.text, GamePanel.WIDTH / 2 - g.getFontMetrics().stringWidth(this.text) / 2, 180);
+		
+		g.setFont(new Font("Arial", Font.PLAIN, 30));
 		for (int i = 0; i < options.length; i++) {
-			g.setColor(Color.WHITE);
-			g.setFont(new Font("Arial", Font.PLAIN, 30));
+			boolean selected = i == this.currentSelection;
+			if (selected) {
+				g.setColor(Color.YELLOW);
+				g.drawImage(alien, GamePanel.WIDTH / 2 - alien.getWidth(null) / 2 - g.getFontMetrics().stringWidth(this.options[i]) / 2 - 50, 380 + i * 50 - alien.getHeight(null) / 2 , null);
+			}	else {
+				g.setColor(Color.WHITE);
+			}
 
 			g.drawString(this.options[i],  GamePanel.WIDTH / 2 - g.getFontMetrics().stringWidth(this.options[i]) / 2, 400 + i * 50);
 		}
@@ -56,13 +64,21 @@ public class GameOverState extends GameState {
 		boolean enter = k == KeyEvent.VK_ENTER;
 		boolean escape = k == KeyEvent.VK_ESCAPE;
 		if (down) {
-
+			this.currentSelection++;
+			if (this.currentSelection >= options.length) {
+				this.currentSelection -= options.length;
+			}
 		} else if (up) {
-
+			this.currentSelection--;
+			if (this.currentSelection < 0) {
+				this.currentSelection += options.length;
+			}
 		} else if (enter) {
-
+			for (int i = 0; i < 3; i++) {
+				this.stateManager.popState();
+			}
 		} else if (escape) {
-			this.stateManager.popState();
+			
 		}
 	}
 

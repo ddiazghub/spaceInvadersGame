@@ -5,9 +5,6 @@
  */
 package game.Components;
 
-import game.Core.GamePanel;
-import java.awt.Toolkit;
-
 /**
  *
  * @author david
@@ -15,24 +12,23 @@ import java.awt.Toolkit;
 public abstract class Enemy extends Character {
 
 	protected String behavior;
-	protected boolean right;
-	protected boolean left;
 	protected boolean lastMovedRight;
 	protected boolean down;
-	protected boolean shooting;
 	protected boolean allowMovement;
 	protected long lastMoveTime;
 	protected int lastMoveX;
+	protected int score;
 	protected int lastMoveY;
 
-	public Enemy(int x, int y, int hp, int movementSpeed, Weapon weapon, String behavior, String imagePath) {
+	public Enemy(int x, int y, int hp, int xSpeed, int ySpeed, int score, Weapon weapon, String behavior, String imagePath) {
 
-		super(x, y, hp, movementSpeed, weapon, imagePath);
+		super(x, y, hp, xSpeed, ySpeed, weapon, imagePath);
 		this.behavior = behavior;
 		this.right = false;
 		this.left = false;
 		this.down = false;
 		this.shooting = false;
+		this.score = score;
 		this.allowMovement = false;
 		this.lastMoveTime = System.currentTimeMillis();
 
@@ -46,6 +42,17 @@ public abstract class Enemy extends Character {
 
 	public void toggleMovement() {
 		this.allowMovement = !this.allowMovement;
+	}
+	
+	public int getScore() {
+		return this.score;
+	}
+	
+	public void collision(Player player) {
+		if (player.getBounds().intersects(this.getBounds())) {
+			player.hurt(this.weapon.getDamage());
+			System.out.println("COLLISION DETECTED");
+		}
 	}
 
 	public boolean canMove() {

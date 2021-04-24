@@ -11,37 +11,45 @@ package game.Components;
  */
 import com.sun.glass.events.KeyEvent;
 import game.Core.GamePanel;
-import java.awt.Graphics;
 
 public class Player extends Character {
 
-	private boolean right = false;
-	private boolean left = false;
-	private boolean shooting = false;
-	private int lives;
+	private int lives = 3;
 
-	public Player(int x, int y, int hp, int movementSpeed, Weapon weapon, String imagePath) {
+	public Player(int hp, int movementSpeed, Weapon weapon, String imagePath) {
 
-		super(x, y, hp, movementSpeed, weapon, imagePath);
+		super(GamePanel.WIDTH / 2, GamePanel.HEIGHT - 100, hp, movementSpeed, 0, weapon, imagePath);
 		this.weapon.setY(this.yPos);
 	}
 
 	public void tick() {
+		if (this.stopped) return;
+		
 		boolean canMoveLeft = xPos > 0;
 		boolean canMoveRight = xPos < GamePanel.WIDTH - this.sprite.getWidth(null);
 		this.weapon.tick();
-		this.weapon.setX(this.xPos + this.WIDTH / 2);
-			if (right && canMoveRight) {
-				this.xPos += 5;
-			}
-			if (left && canMoveLeft) {
-				this.xPos -= 5;
-			}
-			if (shooting) {
-				this.weapon.shoot();
-			}
+		this.weapon.setX(this.xPos + this.width / 2);
+		if (right && canMoveRight) {
+			this.xPos += 5;
+		}
+		if (left && canMoveLeft) {
+			this.xPos -= 5;
+		}
+		if (shooting) {
+			this.weapon.shoot();
+		}
 	}
 	
+	public int getLives() {
+		return this.lives;
+	}
+	
+	public void respawn() {
+		this.lives--;
+		this.xPos = GamePanel.WIDTH / 2;
+		this.yPos = GamePanel.HEIGHT - 100;
+		this.dead = false;
+	}
 	public void keyPressed(int k) {
 
 		boolean right = k == KeyEvent.VK_D;
