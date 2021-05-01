@@ -12,6 +12,7 @@ package game.Components;
 
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Weapon {
 	
@@ -20,14 +21,13 @@ public class Weapon {
 	private int yPos;
 	private int fireRate;
 	private final GameTimer timer;
-	private long lastShot = 0;
-	private boolean canShoot = true;
+	private double chanceToShoot; 
 	private double fireRatePercent;
 	private final ArrayList<Projectile> projectileStream;
 	private Projectile projectile;
 
 	
-	public Weapon(int x, int y, int damage, int projectileSpeed, int fireRate, String shootingDirection, String imagePath) {
+	public Weapon(int x, int y, int damage, double projectileSpeed, int fireRate, String shootingDirection, String imagePath) {
 		
 		this.xPos = x;
 		this.yPos = y;
@@ -37,9 +37,25 @@ public class Weapon {
 		this.projectile = new Projectile(x, y, damage, projectileSpeed, shootingDirection, imagePath);
 		this.timer = new GameTimer();
 		this.timer.newDelay(1000 / (this.fireRate * this.fireRatePercent));
+		this.chanceToShoot = 1;
 		
 	}
-	public Weapon(int x, int y, int damage, int projectileSpeed, double fireRatePercent, String shootingDirection, String imagePath) {
+	
+	public Weapon(int x, int y, int damage, double projectileSpeed, int fireRate, double chanceToShoot, String shootingDirection, String imagePath) {
+		
+		this.xPos = x;
+		this.yPos = y;
+		this.fireRate = fireRate;
+		this.fireRatePercent = 1;
+		this.projectileStream = new ArrayList<>();
+		this.projectile = new Projectile(x, y, damage, projectileSpeed, shootingDirection, imagePath);
+		this.timer = new GameTimer();
+		this.timer.newDelay(1000 / (this.fireRate * this.fireRatePercent));
+		this.chanceToShoot = chanceToShoot;
+		
+	}
+	
+	public Weapon(int x, int y, int damage, double projectileSpeed, double fireRatePercent, String shootingDirection, String imagePath) {
 		
 		this.xPos = x;
 		this.yPos = y;
@@ -49,7 +65,24 @@ public class Weapon {
 		this.projectile = new Projectile(-1000, 1000, damage, projectileSpeed, shootingDirection, imagePath);
 		this.timer = new GameTimer();
 		this.timer.newDelay(1000 / (this.fireRate * this.fireRatePercent));
+		this.chanceToShoot = 1;
+		
 	}
+	
+	public Weapon(int x, int y, int damage, double projectileSpeed, double fireRatePercent, double chanceToShoot, String shootingDirection, String imagePath) {
+		
+		this.xPos = x;
+		this.yPos = y;
+		this.fireRate = 1;
+		this.fireRatePercent = fireRatePercent;
+		this.projectileStream = new ArrayList<>();
+		this.projectile = new Projectile(-1000, 1000, damage, projectileSpeed, shootingDirection, imagePath);
+		this.timer = new GameTimer();
+		this.timer.newDelay(1000 / (this.fireRate * this.fireRatePercent));
+		this.chanceToShoot = chanceToShoot;
+		
+	}
+	
 	public int getX() {
 		return this.xPos;
 	}
@@ -82,14 +115,26 @@ public class Weapon {
 	}
 	public void shoot() {
 		if (this.timer.delayFinished()) {
-			this.projectileStream.add(new Projectile(this.getX(), this.getY(), this.projectile.getDamage(), this.projectile.getSpeedY(), this.projectile.getDirection(), this.projectile.getSprite()));
+			Random random = new Random();
+			double rand = random.nextFloat();
+			if (rand > 1 - this.chanceToShoot) {
+				this.projectileStream.add(new Projectile(this.getX(), this.getY(), this.projectile.getDamage(), this.projectile.getSpeedY(), this.projectile.getDirection(), this.projectile.getSprite()));
+			}
 			this.timer.reset();
 		}
+	}
+	
+	public boolean hasNoProjectiles() {
+		return this.projectileStream.size() < 1;
 	}
 	
 	public void deleteProjectile(int i) {
 		this.projectileStream.set(i, null);
 		this.projectileStream.remove(i);
+	}
+	
+	public void clear() {
+		this.projectileStream.clear();
 	}
 	
 	public int getDamage() {

@@ -18,18 +18,16 @@ import java.awt.Image;
 public class Projectile extends Entity {
 	
 	private int damage;
-	private int width;
-	private int height;
 	private String direction;
 	
-	public Projectile(int x, int y, int damage, int projectileSpeed, String direction, String imagePath) {
+	public Projectile(int x, int y, int damage, double projectileSpeed, String direction, String imagePath) {
 		super(x, y, imagePath);
 		this.damage = damage;
 		this.xSpeed = 0;
 		this.ySpeed = projectileSpeed;
 		this.direction = direction;
 	}
-	public Projectile(int x, int y, int damage, int projectileSpeed, String direction, Image sprite) {
+	public Projectile(int x, int y, int damage, double projectileSpeed, String direction, Image sprite) {
 		super(x, y, sprite);
 		this.damage = damage;
 		this.xSpeed = 0;
@@ -48,10 +46,10 @@ public class Projectile extends Entity {
 	public void travel() {
 		switch (direction) {
 			case "up":
-				this.yPos -= this.ySpeed;
+				this.yPos -= this.ySpeed * this.speedMultiplier;
 				break;
 			case "down":
-				this.yPos += this.ySpeed;
+				this.yPos += this.ySpeed * this.speedMultiplier;
 		}
 	}
 	public void tick() {
@@ -59,7 +57,9 @@ public class Projectile extends Entity {
 		this.travel();
 	}
 	public void render(Graphics g) {
-		g.drawImage(sprite, xPos, yPos, null);
+		if (this.visible) {
+			g.drawImage(sprite, xPos, yPos, null);
+		}
 	}
 	public boolean isOutOfBounds() {
 		return this.xPos < -300 || this.xPos > 300 + GamePanel.WIDTH || this.yPos < -300 || this.xPos > 300 + GamePanel.HEIGHT;

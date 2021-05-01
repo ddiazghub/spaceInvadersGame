@@ -12,31 +12,47 @@ package game.Components.Enemies;
 import game.Components.Enemy;
 import game.Components.Weapon;
 import game.Core.GamePanel;
-import java.util.Random;
 
 public class Invader extends Enemy {
 
 	private int row;
 	private int xDir;
 	public Invader(int x, int y, int initialRow) {
-		super(x, y, 1, 5, 3, 10, new Weapon(-1000, 1000, 1, 4, 0.5, "down", "./src/game/Graphics/Player/disparo.png"), "base", "./src/game/Graphics/Enemies/alienB.png");
+		super(x, y, 1, 1, 3, 10, new Weapon(-1000, 1000, 1, 4, 0.5, 0.2, "down", "./src/game/Graphics/Projectiles/shock.png"), "base", "./src/game/Graphics/Enemies/alienB.png");
 		this.row = initialRow;
 		this.xDir = 1;
 	}
 	
 	public void tick() {
+		if (this.hasWeapon) this.weapon.tick();
+		
+		if (this.timer.delayFinished()) resume();
 		if (this.stopped) return;
+		
 		this.move();
 		if (this.hasWeapon) {
-			this.weapon.tick();
 			this.weapon.setX(this.xPos + this.width / 2);
 			this.weapon.setY(this.yPos + this.height);
 			if (this.shooting) shoot();
 		}
 	}
 	
+	public void tickWeapon() {
+		if (this.hasWeapon) this.weapon.tick();
+	}
+	
 	public void move() {
-		this.xPos += this.xSpeed*this.xDir;
+		this.xPos += this.xSpeed * this.xDir * this.speedMultiplier;
+		if (this.xPos > GamePanel.WIDTH - this.width) {
+			this.xPos = GamePanel.WIDTH - this.width;
+		} else if (this.xPos < 0) {
+			this.xPos = 0;
+		}
+	}
+	
+	public void stop(long duration) {
+		stop();
+		this.timer.newDelay(duration);
 	}
 	
 	public void reverseDirection() {
@@ -46,12 +62,7 @@ public class Invader extends Enemy {
 	}
 	
 	public void shoot() {
-		Random random = new Random();
-		double rand = random.nextFloat();
-		double chance = 0.1;
-		if (rand > 1 - chance) {
-			this.weapon.shoot();
-		}
+		this.weapon.shoot();
 	}
 	
 	public int getRow() {
@@ -61,6 +72,7 @@ public class Invader extends Enemy {
 	public void allowShooting() {
 		this.shooting = true;
 	}
+}
 	
 	/*
 	private int moveFrecuency;
@@ -291,4 +303,3 @@ public class Invader extends Enemy {
 		return this.allowMovement;
 	}
 */
-}

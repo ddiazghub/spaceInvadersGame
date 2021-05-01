@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import game.Components.Enemies.InvaderGroup;
 import game.Components.Enemies.Invader;
 import game.Components.Player;
+import game.Components.DifficultyScaling;
 import game.Components.Weapon;
 import game.Components.GameTimer;
 import java.awt.event.KeyEvent;
@@ -28,9 +29,11 @@ public class ClassicModeState extends GameState {
 
 	private Player player;
 	private InvaderGroup invaders;
-	private ArrayList<Invader> deadInvaders = new ArrayList<>();
+	private ArrayList<Invader> deadInvaders;
 	private ScoreCounter score;
-	private GameTimer timer;
+	private GameTimer startTimer;
+	private GameTimer respawnTimer;
+	private DifficultyScaling scaling;
 
 	public ClassicModeState(GameStateManager stateManager) {
 		super(stateManager);
@@ -38,35 +41,58 @@ public class ClassicModeState extends GameState {
 	}
 
 	public void init() {
-		Weapon base = new Weapon(-1000, 1000, 1, 6, 2, "up", "./src/game/Graphics/Player/disparo.png");
-		this.invaders = new InvaderGroup(10, 100, 6, 9);
-		this.player = new Player(1, 1, base, "./src/game/Graphics/Player/nave2.png");
+		Weapon base = new Weapon(-1000, 1000, 1, 12, 20, "up", "./src/game/Graphics/Projectiles/disparo.png");
+		this.invaders = new InvaderGroup(10, 50, 6, 9);
+		this.deadInvaders = new ArrayList<>();
+		this.scaling = new DifficultyScaling(false, "log");
+		this.player = new Player(1, 5, base, "./src/game/Graphics/Player/nave2.png");
 		this.score = new ScoreCounter();
-		this.timer = new GameTimer();
-		this.timer.newDelay(3000);
+		this.startTimer = new GameTimer();
+		this.respawnTimer = new GameTimer();
+		this.respawnTimer.newDelay(2500);
+		this.respawnTimer.endDelay();
+		this.startTimer.newDelay(3000);
 	}
 
 	public void tick() {
-		if (!this.timer.delayFinished()) return;
+		if (!this.startTimer.delayFinished()) return;
+		if (this.respawnTimer.delayFinished()) this.player.setVisible(true);
 		
 		if (this.player.isDead()) {
-			if (this.player.getLives() < 1) gameOver();
-			this.player.respawn();
+			if (this.player.getLives() < 1) {
+				gameOver();
+			} else {
+				this.player.respawn();
+				this.stopAllEntities(2500);
+				this.player.setVisible(false);
+				this.respawnTimer.reset();
+				
+				this.player.getWeapon().clear();
+				for (Invader invader: this.invaders.getInvaders()) {
+					invader.getWeapon().clear();
+				}
+			}
 		}
 		
 		this.player.tick();
 		this.invaders.tick();
+		
 		for (Invader invader: this.invaders.getInvaders()) {
 			this.player.getWeapon().collision(invader);
 			invader.getWeapon().collision(player);
 			if (invader.isDead()) {
 				this.score.addScore(invader.getScore());
+				this.invaders.stop(200);
 				this.deadInvaders.add(invader);
 			}
 			if (this.player.getBounds().intersects(invader.getBounds())) gameOver();
 		}
 		for (Invader invader: this.deadInvaders) {
 			this.invaders.killInvader(invader);
+		}
+		
+		if (this.invaders.getInvaders().isEmpty()) {
+			newLevel();
 		}
 	}
 
@@ -87,13 +113,34 @@ public class ClassicModeState extends GameState {
 		g.drawString("Score: " + this.score.getScore(), 450, 10 + g.getFontMetrics().getHeight() - 10);
 		g.drawString("Lives:", 10, 10 + g.getFontMetrics().getHeight() - 10);
 		
-		if (!this.timer.delayFinished()) {
+		if (!this.startTimer.delayFinished()) {
 			g.setFont(new Font("Arial", Font.PLAIN, 40));
 			g.setColor(Color.WHITE);
 			g.drawString("SPACE INVADERS", GamePanel.WIDTH / 2 - g.getFontMetrics().stringWidth("SPACE INVADERS") / 2, 200 + g.getFontMetrics().getHeight());
 			g.drawString("MODO CLÁSICO", GamePanel.WIDTH / 2 - g.getFontMetrics().stringWidth("MODO CLÁSICO") / 2, 400 + g.getFontMetrics().getHeight());
 		}
 	}
+	
+	public void newLevel() {
+		double multiplier = this.scaling.newLevel();
+		this.player.resetPosition();
+		this.invaders = new InvaderGroup(10, 50, 6, 9);
+		this.invaders.setSpeedMultiplier(multiplier);
+		this.clearProjectiles();
+		this.stopAllEntities(2000);
+	}
+	
+	public void clearProjectiles() {
+		for (int i = 0; i < this.invaders.getInvaders().size(); i++) {
+			this.invaders.getInvaders().get(i).getWeapon().clear();
+		}
+		this.player.getWeapon().clear();
+	}
+	
+	public void stopAllEntities(long duration) {
+		this.player.stop(duration);
+		this.invaders.stop(duration);
+	} 
 	
 	public void reset() {
 		this.player.respawn();

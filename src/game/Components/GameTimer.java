@@ -28,6 +28,10 @@ public class GameTimer {
 		newDelay((long) duration);
 	}
 	
+	public void endDelay() {
+		this.startTime -= duration;
+	}
+	
 	public boolean delayFinished() {
 		return System.currentTimeMillis() - this.startTime >= this.duration;
 	}

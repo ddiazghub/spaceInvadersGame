@@ -30,6 +30,10 @@ public class GameStateManager {
 		this.states.peek().render(g);
 	}
 	
+	public int size() {
+		return this.states.size();
+	}
+	
 	public void keyPressed(int k) {
 		this.states.peek().keyPressed(k);
 	}

@@ -21,8 +21,8 @@ public interface CharacterEntity {
 	public int getY();
 	public int getWidth();
 	public int getHeight();
-	public int getSpeedX();
-	public int getSpeedY();
+	public double getSpeedX();
+	public double getSpeedY();
 	public Rectangle getBounds();
 	public Image getSprite();
 	public void setSprite(Image sprite);

@@ -74,7 +74,7 @@ public class GameOverState extends GameState {
 				this.currentSelection += options.length;
 			}
 		} else if (enter) {
-			for (int i = 0; i < 3; i++) {
+			while (this.stateManager.size() > 1) {
 				this.stateManager.popState();
 			}
 		} else if (escape) {

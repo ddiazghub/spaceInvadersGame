@@ -16,24 +16,27 @@ public class Player extends Character {
 
 	private int lives = 3;
 
-	public Player(int hp, int movementSpeed, Weapon weapon, String imagePath) {
+	public Player(int hp, double movementSpeed, Weapon weapon, String imagePath) {
 
 		super(GamePanel.WIDTH / 2, GamePanel.HEIGHT - 100, hp, movementSpeed, 0, weapon, imagePath);
+		this.setX(GamePanel.WIDTH / 2 - this.width / 2);
 		this.weapon.setY(this.yPos);
 	}
 
 	public void tick() {
+		this.weapon.tick();
+		this.weapon.setX(this.xPos + this.width / 2);
+		
+		if (this.timer.delayFinished()) resume();
 		if (this.stopped) return;
 		
 		boolean canMoveLeft = xPos > 0;
 		boolean canMoveRight = xPos < GamePanel.WIDTH - this.sprite.getWidth(null);
-		this.weapon.tick();
-		this.weapon.setX(this.xPos + this.width / 2);
 		if (right && canMoveRight) {
-			this.xPos += 5;
+			this.xPos += this.xSpeed * this.speedMultiplier;
 		}
 		if (left && canMoveLeft) {
-			this.xPos -= 5;
+			this.xPos -= this.xSpeed * this.speedMultiplier;
 		}
 		if (shooting) {
 			this.weapon.shoot();
@@ -44,14 +47,24 @@ public class Player extends Character {
 		return this.lives;
 	}
 	
+	public void resetPosition() {
+		this.xPos = GamePanel.WIDTH / 2 - this.width / 2;
+		this.yPos = GamePanel.HEIGHT - 100;
+	}
+	
 	public void respawn() {
 		this.lives--;
-		this.xPos = GamePanel.WIDTH / 2;
-		this.yPos = GamePanel.HEIGHT - 100;
+		this.resetPosition();
 		this.dead = false;
 	}
+	
+	public void stop(long duration) {
+		stop();
+		this.timer.newDelay(duration);
+	}
+	
 	public void keyPressed(int k) {
-
+		
 		boolean right = k == KeyEvent.VK_D;
 		boolean left = k == KeyEvent.VK_A;
 		boolean enter = k == KeyEvent.VK_ENTER;
@@ -68,7 +81,7 @@ public class Player extends Character {
 	}
 
 	public void keyReleased(int k) {
-
+		
 		boolean right = k == KeyEvent.VK_D;
 		boolean left = k == KeyEvent.VK_A;
 		boolean enter = k == KeyEvent.VK_ENTER;

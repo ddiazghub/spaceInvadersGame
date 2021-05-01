@@ -20,7 +20,7 @@ public abstract class Enemy extends Character {
 	protected int score;
 	protected int lastMoveY;
 
-	public Enemy(int x, int y, int hp, int xSpeed, int ySpeed, int score, Weapon weapon, String behavior, String imagePath) {
+	public Enemy(int x, int y, int hp, double xSpeed, double ySpeed, int score, Weapon weapon, String behavior, String imagePath) {
 
 		super(x, y, hp, xSpeed, ySpeed, weapon, imagePath);
 		this.behavior = behavior;

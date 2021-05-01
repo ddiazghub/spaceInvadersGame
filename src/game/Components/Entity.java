@@ -23,10 +23,12 @@ public abstract class Entity {
 	protected int height;
 	protected int xPos;
 	protected int yPos;
+	protected double speedMultiplier = 1.0;
+	protected boolean visible;
 	protected boolean stopped;
-	
-	protected int xSpeed;
-	protected int ySpeed;
+	protected GameTimer timer = new GameTimer();
+	protected double xSpeed;
+	protected double ySpeed;
 	protected Image sprite;
 	
 	public Entity(int x, int y, String imagePath) {
@@ -38,6 +40,7 @@ public abstract class Entity {
 			e.getStackTrace();
 		}
 		this.width = this.sprite.getWidth(null);
+		this.visible = true;
 		this.height = this.sprite.getHeight(null);
 		this.stopped = false;
 	}
@@ -48,6 +51,8 @@ public abstract class Entity {
 		this.sprite = sprite;
 		this.width = this.sprite.getWidth(null);
 		this.height = this.sprite.getHeight(null);
+		this.visible = true;
+		this.stopped = false;
 	}
 	
 	public abstract void tick();
@@ -56,6 +61,10 @@ public abstract class Entity {
 	
 	public void stop() {
 		this.stopped = true;
+	}
+	
+	public void speedMultiplier(double speedMultiplier) {
+		this.speedMultiplier = speedMultiplier;
 	}
 	
 	public void resume() {
@@ -86,11 +95,15 @@ public abstract class Entity {
 		this.yPos = y;
 	}
 	
-	public int getSpeedX() {
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+	}
+	
+	public double getSpeedX() {
 		return this.xSpeed;
 	}
 	
-	public int getSpeedY() {
+	public double getSpeedY() {
 		return this.ySpeed;
 	}
 	
