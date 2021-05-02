@@ -12,6 +12,7 @@ import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
+import game.Components.Animation;
 
 /**
  *
@@ -38,6 +39,7 @@ public class MainMenuState extends GameState {
 		Image background = Toolkit.getDefaultToolkit().getImage("./src/game/Graphics/background.png");
 		Image logo = Toolkit.getDefaultToolkit().getImage("./src/game/Graphics/logo.png");
 		Image alien = Toolkit.getDefaultToolkit().getImage("./src/game/Graphics/Enemies/alienY.png");
+		
 	
 		//Creando el fondo
 		g.drawImage(background, 0, 0, null);

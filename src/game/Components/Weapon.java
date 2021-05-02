@@ -25,6 +25,8 @@ public class Weapon {
 	private double fireRatePercent;
 	private final ArrayList<Projectile> projectileStream;
 	private Projectile projectile;
+	private ArrayList<Animation> explosions;
+	private ArrayList<Animation> finishedExplosions = new ArrayList<>();
 
 	
 	public Weapon(int x, int y, int damage, double projectileSpeed, int fireRate, String shootingDirection, String imagePath) {
@@ -38,6 +40,7 @@ public class Weapon {
 		this.timer = new GameTimer();
 		this.timer.newDelay(1000 / (this.fireRate * this.fireRatePercent));
 		this.chanceToShoot = 1;
+		this.explosions = new ArrayList<>();
 		
 	}
 	
@@ -52,6 +55,7 @@ public class Weapon {
 		this.timer = new GameTimer();
 		this.timer.newDelay(1000 / (this.fireRate * this.fireRatePercent));
 		this.chanceToShoot = chanceToShoot;
+		this.explosions = new ArrayList<>();
 		
 	}
 	
@@ -66,6 +70,7 @@ public class Weapon {
 		this.timer = new GameTimer();
 		this.timer.newDelay(1000 / (this.fireRate * this.fireRatePercent));
 		this.chanceToShoot = 1;
+		this.explosions = new ArrayList<>();
 		
 	}
 	
@@ -80,6 +85,7 @@ public class Weapon {
 		this.timer = new GameTimer();
 		this.timer.newDelay(1000 / (this.fireRate * this.fireRatePercent));
 		this.chanceToShoot = chanceToShoot;
+		this.explosions = new ArrayList<>();
 		
 	}
 	
@@ -104,13 +110,28 @@ public class Weapon {
 				this.deleteProjectile(i);
 			}
 		}
+		
+		for (Animation explosion: explosions) {
+			if (explosion.ended()) {
+				this.finishedExplosions.add(explosion);
+			}
+		}
+		
+		for (Animation finishedExplosion: finishedExplosions) {
+			this.explosions.remove(finishedExplosion);
+		}
+		
 	}
+	
 	public void newProjectile(int x, int y, int damage, int projectileSpeed, String shootingDirection, String imagePath) {
 		this.projectile = new Projectile(x, y, damage, projectileSpeed, shootingDirection, imagePath);
 	}
 	public void render(Graphics g) {
 		for (Projectile projectile: this.projectileStream) {
 			projectile.render(g);
+		}
+		for (Animation explosion: this.explosions) {
+			explosion.render(g);
 		}
 	}
 	public void shoot() {
@@ -146,24 +167,18 @@ public class Weapon {
 	}
 	
 	public void collision(CharacterEntity entity) {
-		for (int i = 0; i < this.projectileStream.size(); i++) {
-			if (entity.getBounds().intersects(this.projectileStream.get(i).getBounds())) {
-				entity.hurt(this.projectileStream.get(i).getDamage());
-				this.deleteProjectile(i);
+		if (entity.isVulnerable()) {
+			for (int i = 0; i < this.projectileStream.size(); i++) {
+				if (entity.getBounds().intersects(this.projectileStream.get(i).getBounds())) {
+					entity.hurt(this.projectileStream.get(i).getDamage());
+					this.deleteProjectile(i);
+				}
 			}
 		}
-	}
-	/*
-	public void collision(Invader invader) {
-		for (int i = 0; i < this.projectileStream.size(); i++) {
-			if (invader.getBounds().intersects(this.projectileStream.get(i).getBounds())) {
-				invader.hurt(this.projectileStream.get(i).getDamage());
-				this.deleteProjectile(i);
-				System.out.println("COLLISION DETECTED");
-			}
+		if (entity.isDead()) {
+			this.explosions.add(new Animation(entity.getX(), entity.getY(), "./src/game/Graphics/explosion.gif", 1000));
 		}
 	}
-	*/
 }
 
 /*

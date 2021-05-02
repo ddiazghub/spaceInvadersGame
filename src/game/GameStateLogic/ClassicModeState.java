@@ -34,6 +34,7 @@ public class ClassicModeState extends GameState {
 	private GameTimer startTimer;
 	private GameTimer respawnTimer;
 	private DifficultyScaling scaling;
+	private Image explosion;
 
 	public ClassicModeState(GameStateManager stateManager) {
 		super(stateManager);
@@ -97,7 +98,6 @@ public class ClassicModeState extends GameState {
 	}
 
 	public void render(Graphics g) {
-		
 		Image background = Toolkit.getDefaultToolkit().getImage("./src/game/Graphics/background.png");
 		Image life = Toolkit.getDefaultToolkit().getImage("./src/game/Graphics/vida.png");
 		g.drawImage(background, 0, 0, null);

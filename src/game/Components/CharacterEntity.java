@@ -28,4 +28,7 @@ public interface CharacterEntity {
 	public void setSprite(Image sprite);
 	public void hurt(int damage);
 	public void heal(int hp);
+	public boolean isVulnerable();
+	public boolean isDead();
+	
 }

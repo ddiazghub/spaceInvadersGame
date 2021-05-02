@@ -21,6 +21,7 @@ public abstract class Character extends Entity implements CharacterEntity {
 	protected boolean left;
 	protected boolean dead = false;
 	protected boolean vulnerable;
+	protected GameTimer invulnerabilityTimer;
 	
 	public Character(int x, int y, int hp, double xSpeed, double ySpeed, Weapon weapon, String imagePath) {
 		super(x, y, imagePath);
@@ -30,6 +31,7 @@ public abstract class Character extends Entity implements CharacterEntity {
 		this.hasWeapon = weapon != null;
 		this.weapon = weapon;
 		this.vulnerable = true;
+		this.invulnerabilityTimer = new GameTimer();
 	}
 	
 	public abstract void tick();
@@ -53,6 +55,15 @@ public abstract class Character extends Entity implements CharacterEntity {
 	
 	public void setVulnerable(boolean vulnerable) {
 		this.vulnerable = vulnerable;
+	}
+	
+	public boolean isVulnerable() {
+		return this.vulnerable;
+	}
+	
+	public void invulnerable(long duration) {
+		setVulnerable(true);
+		this.invulnerabilityTimer.newDelay(duration);
 	}
 	
 	public void hurt(int damage) {
