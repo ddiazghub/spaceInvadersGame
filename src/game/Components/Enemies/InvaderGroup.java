@@ -40,7 +40,7 @@ public class InvaderGroup {
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < columns; j++) {
 				// this.invaders.add(new Invader(x + j * (GamePanel.WIDTH / 10 - 25), y + i * (GamePanel.HEIGHT / 10 - 10), 1, GamePanel.WIDTH / 30, i));
-				Invader invader = new Invader(x + j * (GamePanel.WIDTH / 10 - 25), y + i * (GamePanel.HEIGHT / 10 - 10), i);
+				Invader invader = new Invader(x + j * (GamePanel.WIDTH / 13 - 28), y + i * (GamePanel.HEIGHT / 13 - 13), i);
 				this.invaders.add(invader);
 				this.invaderColumns.get(j).push(invader);
 				this.changeColor(invader);
@@ -120,7 +120,7 @@ public class InvaderGroup {
 			this.changeColor(invader);
 		}
 		
-		for (int i = 0; i < this.invaderColumns.size() - 1; i++) {
+		for (int i = 0; i < this.invaderColumns.size() - 10; i++) {
 			if (this.invaderColumns.get(i).size() > 0) this.invaderColumns.get(i).peek().allowShooting();
 		}
 		
