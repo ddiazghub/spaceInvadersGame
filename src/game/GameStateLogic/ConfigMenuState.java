@@ -39,7 +39,7 @@ public class ConfigMenuState extends GameState {
 	
 	
 		Image background = Toolkit.getDefaultToolkit().getImage("./src/game/Graphics/background.png");
-		Image alien = Toolkit.getDefaultToolkit().getImage("./src/game/Graphics/Enemies/alienY.png");
+		Image alien = Toolkit.getDefaultToolkit().getImage("./src/game/Graphics/alienSelec.png");
 		g.drawImage(background, 0, 0, null);
 		
 		g.setFont(new Font("Arial", Font.PLAIN, 20));

@@ -38,7 +38,7 @@ public class MainMenuState extends GameState {
 		
 		Image background = Toolkit.getDefaultToolkit().getImage("./src/game/Graphics/background.png");
 		Image logo = Toolkit.getDefaultToolkit().getImage("./src/game/Graphics/logo.png");
-		Image alien = Toolkit.getDefaultToolkit().getImage("./src/game/Graphics/Enemies/alienY.png");
+		Image alien = Toolkit.getDefaultToolkit().getImage("./src/game/Graphics/alienSelec.png");
 		
 	
 		//Creando el fondo
@@ -53,7 +53,7 @@ public class MainMenuState extends GameState {
 			boolean selected = i == this.currentSelection;
 			if (selected) {
 				g.setColor(Color.YELLOW);
-				g.drawImage(alien, GamePanel.WIDTH / 2 - alien.getWidth(null) / 2 - g.getFontMetrics().stringWidth(this.options[i]) / 2 - 50, 380 + i * 50 - alien.getHeight(null) / 2 , null);
+				g.drawImage(alien, GamePanel.WIDTH / 2 - alien.getWidth(null) / 2 - g.getFontMetrics().stringWidth(this.options[i]) / 2 - 35, 375 + i * 50 - alien.getHeight(null) / 2 , null);
 			}	else {
 				g.setColor(Color.WHITE);
 			}
