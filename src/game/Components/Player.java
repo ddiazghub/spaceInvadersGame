@@ -18,7 +18,7 @@ public class Player extends Character {
 
 	public Player(int hp, double movementSpeed, Weapon weapon, String imagePath) {
 
-		super(GamePanel.WIDTH / 2, GamePanel.HEIGHT - 100, hp, movementSpeed, 0, weapon, imagePath);
+		super(GamePanel.WIDTH / 2, GamePanel.HEIGHT - 60, hp, movementSpeed, 0, weapon, imagePath);
 		this.setX(GamePanel.WIDTH / 2 - this.width / 2);
 		this.weapon.setY(this.yPos);
 	}
@@ -49,7 +49,7 @@ public class Player extends Character {
 	
 	public void resetPosition() {
 		this.xPos = GamePanel.WIDTH / 2 - this.width / 2;
-		this.yPos = GamePanel.HEIGHT - 100;
+		this.yPos = GamePanel.HEIGHT - 60;
 	}
 	
 	public void respawn() {

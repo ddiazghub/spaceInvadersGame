@@ -34,7 +34,7 @@ public class ClassicModeState extends GameState {
 	private GameTimer startTimer;
 	private GameTimer respawnTimer;
 	private DifficultyScaling scaling;
-	private Image explosion;
+	private boolean paused;
 
 	public ClassicModeState(GameStateManager stateManager) {
 		super(stateManager);
@@ -46,16 +46,23 @@ public class ClassicModeState extends GameState {
 		this.invaders = new InvaderGroup(10, 50, 6, 9);
 		this.deadInvaders = new ArrayList<>();
 		this.scaling = new DifficultyScaling(false, "log");
-		this.player = new Player(1, 5, base, "./src/game/Graphics/Player/nave2.png");
+		this.player = new Player(1, 3, base, "./src/game/Graphics/Player/nave2.png");
 		this.score = new ScoreCounter();
 		this.startTimer = new GameTimer();
 		this.respawnTimer = new GameTimer();
 		this.respawnTimer.newDelay(2500);
 		this.respawnTimer.endDelay();
 		this.startTimer.newDelay(3000);
+		this.paused = false;
 	}
 
 	public void tick() {
+		if (paused) {
+			this.startTimer.resume();
+			this.respawnTimer.resume();
+			this.paused = false;
+		}
+		
 		if (!this.startTimer.delayFinished()) return;
 		if (this.respawnTimer.delayFinished()) this.player.setVisible(true);
 		
@@ -158,6 +165,9 @@ public class ClassicModeState extends GameState {
 		this.player.keyPressed(k);
 		boolean esc = k == KeyEvent.VK_ESCAPE;
 		if (esc) {
+			this.paused = true;
+			this.startTimer.pause();
+			this.respawnTimer.pause();
 			this.stateManager.pushState(new PauseMenuState(this.stateManager));
 		}
 	}

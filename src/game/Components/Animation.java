@@ -19,19 +19,23 @@ public class Animation {
 	private GameTimer timer;
 	private int x;
 	private int y;
+	private int width;
+	private int height;
 	
-	public Animation(int x, int y, String path, long duration) {
+	public Animation(int x, int y, int width, int height, String path, long duration) {
 				
 		this.animation = Toolkit.getDefaultToolkit().createImage(path);
 		this.timer = new GameTimer();
 		this.timer.newDelay(duration);
 		this.x = x;
 		this.y = y;
+		this.width = width;
+		this.height = height;
 		
 	}
 	
 	public void render(Graphics g) {
-		g.drawImage(this.animation, x, y, null);
+		g.drawImage(animation, x, y, width, height, null);
 	}
 	
 	public boolean ended() {

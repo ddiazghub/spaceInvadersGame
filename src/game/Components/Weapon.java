@@ -176,7 +176,7 @@ public class Weapon {
 			}
 		}
 		if (entity.isDead()) {
-			this.explosions.add(new Animation(entity.getX(), entity.getY(), "./src/game/Graphics/explosion.gif", 1000));
+			this.explosions.add(new Animation(entity.getX() - entity.getWidth() / 2, entity.getY() - entity.getHeight() / 2, 2 * entity.getWidth(), 2 * entity.getHeight(), "./src/game/Graphics/explosion.gif", 1000));
 		}
 	}
 }
