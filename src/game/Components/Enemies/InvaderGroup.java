@@ -25,8 +25,10 @@ public class InvaderGroup {
 	private ArrayList<Invader> invaders;
 	private ArrayList<Stack<Invader>> invaderColumns;
 	private Image[] sprites = new Image[7];
-	protected boolean stopped;
-	protected GameTimer timer = new GameTimer();
+	private boolean stopped = false;
+	private boolean paused = false;
+	private boolean visible = true;
+	private GameTimer timer = new GameTimer();
 
 	public InvaderGroup(int x, int y, int rows, int columns) {
 
@@ -40,7 +42,7 @@ public class InvaderGroup {
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < columns; j++) {
 				// this.invaders.add(new Invader(x + j * (GamePanel.WIDTH / 10 - 25), y + i * (GamePanel.HEIGHT / 10 - 10), 1, GamePanel.WIDTH / 30, i));
-				Invader invader = new Invader(x + j * (GamePanel.WIDTH / 13 - 28), y + i * (GamePanel.HEIGHT / 13 - 13), i);
+				Invader invader = new Invader(x + j * (GamePanel.WIDTH / 13 - 23), y + i * (GamePanel.HEIGHT / 13 - 13), i);
 				this.invaders.add(invader);
 				this.invaderColumns.get(j).push(invader);
 				this.changeColor(invader);
@@ -89,6 +91,26 @@ public class InvaderGroup {
 		this.stopped = false;
 	}
 	
+	public void hide() {
+		this.visible = false;
+	}
+	
+	public void show() {
+		this.visible = true;
+	}
+	
+	public void paused(boolean paused) {
+		this.paused = paused;
+	}
+	
+	public void pauseTimers() {
+		invaders.get(0).pauseTimers();
+	}
+	
+	public void resumeTimers() {
+		invaders.get(0).resumeTimers();
+	}
+	
 	public void setSpeedMultiplier(double speedMultiplier) {
 		this.speedMultiplier = speedMultiplier;
 		this.speedMultiplier(speedMultiplier);
@@ -107,7 +129,7 @@ public class InvaderGroup {
 
 	public void tick() {
 		if (this.timer.delayFinished()) resume();
-		if (this.stopped) {
+		if (this.stopped || this.paused) {
 			for (Invader invader : invaders) {
 			invader.tickWeapon();
 			}
@@ -131,8 +153,11 @@ public class InvaderGroup {
 			this.hitEdge = false;
 		}
 		
-		if (this.invaders.size() < 5) {
+		if (this.invaders.size() < 3) {
 			this.speedMultiplier(5 * this.speedMultiplier);
+		}
+		if (this.invaders.size() < 5) {
+			this.speedMultiplier(4 * this.speedMultiplier);
 		} else if (this.invaders.size() < 10) {
 			this.speedMultiplier(3 * this.speedMultiplier);
 		} else if (this.invaders.size() < 20) {
@@ -143,8 +168,10 @@ public class InvaderGroup {
 	}
 	
 	public void render(Graphics g) {
-		for (Invader invader : invaders) {
-			invader.render(g);
+		if (this.visible) {
+			for (Invader invader : invaders) {
+				invader.render(g);
+			}
 		}
 	}
 

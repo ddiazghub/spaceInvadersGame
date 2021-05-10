@@ -30,6 +30,7 @@ public abstract class Entity {
 	protected double xSpeed;
 	protected double ySpeed;
 	protected Image sprite;
+	protected boolean paused;
 	
 	public Entity(int x, int y, String imagePath) {
 		this.xPos = x;
@@ -43,6 +44,7 @@ public abstract class Entity {
 		this.visible = true;
 		this.height = this.sprite.getHeight(null);
 		this.stopped = false;
+		this.paused = false;
 	}
 	
 	public Entity(int x, int y, Image sprite) {
@@ -53,6 +55,7 @@ public abstract class Entity {
 		this.height = this.sprite.getHeight(null);
 		this.visible = true;
 		this.stopped = false;
+		this.paused = false;
 	}
 	
 	public abstract void tick();
@@ -65,6 +68,20 @@ public abstract class Entity {
 	
 	public void speedMultiplier(double speedMultiplier) {
 		this.speedMultiplier = speedMultiplier;
+	}
+	
+	public void pauseTimers() {
+		this.paused = true;
+		this.timer.pause();
+	}
+	
+	public void resumeTimers() {
+		this.paused = false;
+		this.timer.resume();
+	}
+	
+	public boolean isStopped() {
+		return this.stopped;
 	}
 	
 	public void resume() {
@@ -105,6 +122,10 @@ public abstract class Entity {
 	
 	public double getSpeedY() {
 		return this.ySpeed;
+	}
+	
+	public boolean isVisible() {
+		return this.visible;
 	}
 	
 	public Rectangle getBounds() {

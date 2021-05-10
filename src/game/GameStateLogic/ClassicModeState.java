@@ -12,6 +12,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import game.Components.Enemies.InvaderGroup;
 import game.Components.Enemies.Invader;
 import game.Components.Player;
@@ -60,11 +61,24 @@ public class ClassicModeState extends GameState {
 		if (paused) {
 			this.startTimer.resume();
 			this.respawnTimer.resume();
+			this.player.resumeTimers();
+			this.invaders.resumeTimers();
 			this.paused = false;
 		}
 		
 		if (!this.startTimer.delayFinished()) return;
-		if (this.respawnTimer.delayFinished()) this.player.setVisible(true);
+		if (this.respawnTimer.delayFinished()) {
+			if (!this.player.isVisible()) {
+				this.player.invulnerable(2000);
+				this.player.setVisible(true);
+			}
+		}
+		
+		if (this.player.isVisible()) {
+			this.invaders.paused(false);
+		} else {
+			this.invaders.paused(true);
+		}
 		
 		if (this.player.isDead()) {
 			if (this.player.getLives() < 1) {
@@ -129,9 +143,13 @@ public class ClassicModeState extends GameState {
 	}
 	
 	public void newLevel() {
+		int[] levelsFor1Up = {4, 8, 12, 16, 20, 24, 28, 32, 36, 40};
 		double multiplier = this.scaling.newLevel();
+		if (Arrays.binarySearch(levelsFor1Up, (int) this.scaling.getCount()) > -1) {
+			this.player.addLife();
+		}
 		this.player.resetPosition();
-		this.invaders = new InvaderGroup(10, 50, 6, 9);
+		this.invaders = new InvaderGroup(10, 50, (int) Math.floor(6 + multiplier), (int) Math.floor(9 + multiplier));
 		this.invaders.setSpeedMultiplier(multiplier);
 		this.clearProjectiles();
 		this.stopAllEntities(2000);
@@ -149,16 +167,8 @@ public class ClassicModeState extends GameState {
 		this.invaders.stop(duration);
 	} 
 	
-	public void reset() {
-		this.player.respawn();
-	}
-	
 	public void gameOver() {
 		this.stateManager.pushState(new GameOverState(this.stateManager));
-	}
-	
-	public void moveEnemy() {
-
 	}
 
 	public void keyPressed(int k) {
@@ -166,8 +176,10 @@ public class ClassicModeState extends GameState {
 		boolean esc = k == KeyEvent.VK_ESCAPE;
 		if (esc) {
 			this.paused = true;
+			this.invaders.pauseTimers();
 			this.startTimer.pause();
 			this.respawnTimer.pause();
+			this.player.pauseTimers();
 			this.stateManager.pushState(new PauseMenuState(this.stateManager));
 		}
 	}

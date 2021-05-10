@@ -27,7 +27,8 @@ public class Player extends Character {
 		this.weapon.tick();
 		this.weapon.setX(this.xPos + this.width / 2);
 		
-		if (this.timer.delayFinished()) resume();
+		if (this.invulnerabilityTimer.delayFinished()) this.vulnerable = true;
+		if (this.timer.delayFinished() && this.stopped) resume();
 		if (this.stopped) return;
 		
 		boolean canMoveLeft = xPos > 0;
@@ -43,8 +44,28 @@ public class Player extends Character {
 		}
 	}
 	
+	@Override
+	public void pauseTimers() {
+		this.paused = true;
+		this.timer.pause();
+		this.invulnerabilityAnimTimer.pause();
+		this.invulnerabilityTimer.pause();
+	}
+	
+	@Override
+	public void resumeTimers() {
+		this.paused = false;
+		this.timer.resume();
+		this.invulnerabilityAnimTimer.resume();
+		this.invulnerabilityTimer.resume();
+	}
+	
 	public int getLives() {
 		return this.lives;
+	}
+	
+	public void addLife() {
+		this.lives++;
 	}
 	
 	public void resetPosition() {

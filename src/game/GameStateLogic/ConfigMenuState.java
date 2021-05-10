@@ -48,11 +48,11 @@ public class ConfigMenuState extends GameState {
 			boolean selected = i == this.currentSelection;
 			if (selected) {
 				g.setColor(Color.YELLOW);
-				g.drawImage(alien, 110, 165 + i * (g.getFontMetrics().getHeight() + 10) - alien.getHeight(null) / 2, null);
+				g.drawImage(alien, 140, 165 + i * (g.getFontMetrics().getHeight() + 10) - alien.getHeight(null) / 2, null);
 			}	else {
 				g.setColor(Color.WHITE);
 			}
-			g.drawString(this.options[i], 280, 165 + i * (g.getFontMetrics().getHeight() + 10));
+			g.drawString(this.options[i], 280, 175 + i * (g.getFontMetrics().getHeight() + 10));
 		}
 		g.setColor(Color.WHITE);
 		g.fillRect(200, 100, 20, GamePanel.HEIGHT - 200);

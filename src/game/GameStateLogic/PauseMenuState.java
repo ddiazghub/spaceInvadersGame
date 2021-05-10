@@ -35,26 +35,24 @@ public class PauseMenuState extends GameState {
 	public void render(Graphics g) {
 		
 		Image background = Toolkit.getDefaultToolkit().getImage("./src/game/Graphics/background.png");
-		Image logo = Toolkit.getDefaultToolkit().getImage("./src/game/Graphics/logo.png");
+		Image alien = Toolkit.getDefaultToolkit().getImage("./src/game/Graphics/alienSelec.png");
 	
-		//Creando el fondo
 		g.drawImage(background, 0, 0, null);
 		
 		g.setColor(Color.WHITE);
 		g.setFont(new Font("Arial", Font.PLAIN, 70));
 		g.drawString("Pausa", GamePanel.WIDTH / 2 - g.getFontMetrics().stringWidth("Pausa") / 2, 200);
 	
-		
+		g.setFont(new Font("Arial", Font.PLAIN, 40));
 		for(int i = 0; i < this.options.length; i++) {
 			
 			boolean selected = i == this.currentSelection;
 			if (selected) {
-				g.setColor(Color.GREEN);
+				g.setColor(Color.YELLOW);
+				g.drawImage(alien, GamePanel.WIDTH / 2 - alien.getWidth(null) / 2 - g.getFontMetrics().stringWidth(this.options[i]) / 2 - 40, 375 - alien.getHeight(null) / 2 + i * 50, null);
 			}	else {
 				g.setColor(Color.WHITE);
 			}
-			
-			g.setFont(new Font("Arial", Font.PLAIN, 40));
 			g.drawString(this.options[i], GamePanel.WIDTH / 2 - g.getFontMetrics().stringWidth(this.options[i]) / 2, 390 + i * 50);
 		}
 	}

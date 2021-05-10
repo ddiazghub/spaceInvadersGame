@@ -22,6 +22,7 @@ public abstract class Character extends Entity implements CharacterEntity {
 	protected boolean dead = false;
 	protected boolean vulnerable;
 	protected GameTimer invulnerabilityTimer;
+	protected GameTimer invulnerabilityAnimTimer;
 	
 	public Character(int x, int y, int hp, double xSpeed, double ySpeed, Weapon weapon, String imagePath) {
 		super(x, y, imagePath);
@@ -32,13 +33,22 @@ public abstract class Character extends Entity implements CharacterEntity {
 		this.weapon = weapon;
 		this.vulnerable = true;
 		this.invulnerabilityTimer = new GameTimer();
+		this.invulnerabilityAnimTimer = new GameTimer();
+		this.invulnerabilityAnimTimer.newDelay(400);
 	}
 	
 	public abstract void tick();
 		
 	public void render(Graphics g) {
 		if (this.visible) {
-			g.drawImage(this.sprite, this.xPos, this.yPos, null);
+			if (!this.vulnerable) {
+				if (this.invulnerabilityAnimTimer.remainingDuration() < 200) {
+					g.drawImage(this.sprite, this.xPos, this.yPos, null);
+				}
+				if (this.invulnerabilityAnimTimer.delayFinished()) this.invulnerabilityAnimTimer.reset();
+			} else {
+				g.drawImage(this.sprite, this.xPos, this.yPos, null);
+			}
 			if (hasWeapon) {
 				this.weapon.render(g);
 			}
@@ -62,7 +72,7 @@ public abstract class Character extends Entity implements CharacterEntity {
 	}
 	
 	public void invulnerable(long duration) {
-		setVulnerable(true);
+		setVulnerable(false);
 		this.invulnerabilityTimer.newDelay(duration);
 	}
 	
@@ -72,7 +82,7 @@ public abstract class Character extends Entity implements CharacterEntity {
 		this.hp -= damage;
 		boolean dead = this.hp < 1;
 		if (dead) {
-			this.kill();
+			this.dead = true;
 		}
 	}
 	
@@ -86,9 +96,5 @@ public abstract class Character extends Entity implements CharacterEntity {
 	
 	public void heal(int hp) {
 		this.hp += hp;
-	}
-	
-	public void kill() {
-		this.dead = true;
 	}
 }

@@ -30,6 +30,10 @@ public class DifficultyScaling {
 		return this.applyScaling();
 	}
 	
+	public long getCount() {
+		return this.count;
+	}
+	
 	public double getCurrentMultiplier() {
 		return this.applyScaling();
 	}

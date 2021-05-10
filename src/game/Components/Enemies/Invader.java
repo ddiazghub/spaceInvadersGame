@@ -26,7 +26,7 @@ public class Invader extends Enemy {
 	public void tick() {
 		if (this.hasWeapon) this.weapon.tick();
 		
-		if (this.timer.delayFinished()) resume();
+		if (this.timer.delayFinished() && this.stopped) resume();
 		if (this.stopped) return;
 		
 		this.move();

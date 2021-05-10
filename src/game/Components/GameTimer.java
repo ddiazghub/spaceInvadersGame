@@ -16,7 +16,7 @@ public class GameTimer {
 	private long elapsedTime;
 
 	public GameTimer() {
-		duration = 0;
+		duration = 1;
 		startTime = 0;
 		elapsedTime = 0;
 	}
@@ -48,5 +48,10 @@ public class GameTimer {
 	
 	public void reset() {
 		newDelay(this.duration);
+	}
+	
+	public long remainingDuration() {
+		if (delayFinished()) return 0;
+		else return duration - (System.currentTimeMillis() - startTime);
 	}
 }

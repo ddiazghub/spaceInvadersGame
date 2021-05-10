@@ -37,7 +37,7 @@ public class GameOverState extends GameState {
 	public void render(Graphics g) {
 
 		Image background = Toolkit.getDefaultToolkit().getImage("./src/game/Graphics/background.png");
-		Image alien = Toolkit.getDefaultToolkit().getImage("./src/game/Graphics/Enemies/alienY.png");
+		Image alien = Toolkit.getDefaultToolkit().getImage("./src/game/Graphics/alienSelec.png");
 		g.drawImage(background, 0, 0, null);
 
 		g.setColor(Color.RED);
@@ -49,7 +49,7 @@ public class GameOverState extends GameState {
 			boolean selected = i == this.currentSelection;
 			if (selected) {
 				g.setColor(Color.YELLOW);
-				g.drawImage(alien, GamePanel.WIDTH / 2 - alien.getWidth(null) / 2 - g.getFontMetrics().stringWidth(this.options[i]) / 2 - 50, 380 + i * 50 - alien.getHeight(null) / 2 , null);
+				g.drawImage(alien, GamePanel.WIDTH / 2 - alien.getWidth(null) / 2 - g.getFontMetrics().stringWidth(this.options[i]) / 2 - 40, 385 - alien.getHeight(null) / 2 + i * 50, null);
 			}	else {
 				g.setColor(Color.WHITE);
 			}
@@ -74,8 +74,15 @@ public class GameOverState extends GameState {
 				this.currentSelection += options.length;
 			}
 		} else if (enter) {
-			while (this.stateManager.size() > 1) {
+			if (currentSelection == 0) {
 				this.stateManager.popState();
+				this.stateManager.popState();
+				this.stateManager.pushState(new ClassicModeState(stateManager));
+			}
+			if (currentSelection == 1) {
+				while (this.stateManager.size() > 1) {
+					this.stateManager.popState();
+				}
 			}
 		} else if (escape) {
 			
