@@ -16,7 +16,7 @@ import java.util.Random;
  */
 public class YellowBoss2 extends Enemy {
 	public YellowBoss2() {
-		super(new Random().nextInt(GamePanel.WIDTH - 50), -500, 1000, 1, 4, 100, new Weapon(-1000, 1000, 7, 4, 1, 0.4, "down", "./src/game/Graphics/Projectiles/shock.png"), "base", "./src/game/Graphics/Enemies/yellow_boss2.png");
+		super(new Random().nextInt(GamePanel.WIDTH - 50), -500, 1000, 1, 4, 100, new Weapon(-1000, 1000, 7, 4, 1, 0.4, "down", "./src/game/Graphics/Projectiles/shock.png"), "./src/game/Graphics/Enemies/yellow_boss2.png");
 		this.shooting = true;
 		this.xPos = new Random().nextInt(GamePanel.WIDTH - this.width);
 		this.yPos = -this.height;

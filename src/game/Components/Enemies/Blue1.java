@@ -8,20 +8,16 @@ package game.Components.Enemies;
 import game.Components.Enemy;
 import game.Components.Weapon;
 import game.Core.GamePanel;
+import java.util.Random;
 
 /**
  *
  * @author david
  */
-public class RedBoss extends Enemy {
-	
-	private boolean hitEdge;
-	private int xDir;
-	
-	public RedBoss(int x, int y) {
-		super(x, y, 300, 3, 1, 100, new Weapon(-1000, 1000, 30, 4, 2, 0.3, 6, "down", "./src/game/Graphics/Projectiles/shock.png"), "./src/game/Graphics/Enemies/red_boss.png");
+public class Blue1 extends Enemy {
+	public Blue1() {
+		super(new Random().nextInt(GamePanel.WIDTH - 50), -50, 30, 1, 1, 100, new Weapon(-1000, 1000, 7, 4, 1, 0.4, "down", "./src/game/Graphics/Projectiles/shock.png"), "./src/game/Graphics/Enemies/blue_enemy1.png");
 		this.shooting = true;
-		this.xDir = 1;
 	}
 	
 	public void tick() {
@@ -43,10 +39,11 @@ public class RedBoss extends Enemy {
 	}
 	
 	public void move() {
-		if (this.getX() >= GamePanel.WIDTH - this.getWidth() || this.getX() <= 0) {
-			this.xDir *= -1;
+		if (this.getY() > GamePanel.HEIGHT) {
+			this.yPos = -this.height;
+			this.xPos = new Random().nextInt(GamePanel.WIDTH);
 		}
-		this.xPos += this.xSpeed * this.xDir * this.speedMultiplier;
+		this.yPos += this.ySpeed * this.speedMultiplier;
 	}
 	
 	public void stop(long duration) {
