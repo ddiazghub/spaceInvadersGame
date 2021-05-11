@@ -22,9 +22,11 @@ public class GameOverState extends GameState {
 	private String text = "FIN DEL JUEGO";
 	private String[] options = {"Intentar nuevamente", "Volver al menu"};
 	private int currentSelection = 0;
+	private String gamemode;
 
-	public GameOverState(GameStateManager stateManager) {
+	public GameOverState(GameStateManager stateManager, String gamemode) {
 		super(stateManager);
+		this.gamemode = gamemode;
 	}
 
 	public void init() {
@@ -77,7 +79,8 @@ public class GameOverState extends GameState {
 			if (currentSelection == 0) {
 				this.stateManager.popState();
 				this.stateManager.popState();
-				this.stateManager.pushState(new ClassicModeState(stateManager));
+				if (this.gamemode.equals("classic")) this.stateManager.pushState(new ClassicModeState(stateManager));
+				if (this.gamemode.equals("survival")) this.stateManager.pushState(new SurvivalModeState(stateManager));
 			}
 			if (currentSelection == 1) {
 				while (this.stateManager.size() > 1) {

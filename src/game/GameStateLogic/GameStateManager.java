@@ -46,7 +46,7 @@ public class GameStateManager {
 		this.states.push(state);
 	}
 	
-	public GameState currentState(GameState state) {
+	public GameState currentState() {
 		return this.states.peek();
 	}
 	

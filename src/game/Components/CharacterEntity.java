@@ -30,5 +30,11 @@ public interface CharacterEntity {
 	public void heal(int hp);
 	public boolean isVulnerable();
 	public boolean isDead();
+	public void pauseTimers();
+	public void resumeTimers();
+	public Weapon getWeapon();
+	public int getScore();
+	public void stop(long durationm);
+	public void stop();
 	
 }

@@ -168,7 +168,7 @@ public class ClassicModeState extends GameState {
 	} 
 	
 	public void gameOver() {
-		this.stateManager.pushState(new GameOverState(this.stateManager));
+		this.stateManager.pushState(new GameOverState(this.stateManager, "classic"));
 	}
 
 	public void keyPressed(int k) {

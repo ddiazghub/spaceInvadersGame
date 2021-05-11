@@ -21,6 +21,7 @@ public abstract class Character extends Entity implements CharacterEntity {
 	protected boolean left;
 	protected boolean dead = false;
 	protected boolean vulnerable;
+	protected int score = 0;
 	protected GameTimer invulnerabilityTimer;
 	protected GameTimer invulnerabilityAnimTimer;
 	
@@ -96,5 +97,9 @@ public abstract class Character extends Entity implements CharacterEntity {
 	
 	public void heal(int hp) {
 		this.hp += hp;
+	}
+	
+	public int getScore() {
+		return this.score;
 	}
 }

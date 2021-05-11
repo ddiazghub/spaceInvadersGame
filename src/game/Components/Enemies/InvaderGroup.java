@@ -52,7 +52,7 @@ public class InvaderGroup {
 			this.invaderColumns.get(i).peek().allowShooting();
 		}
 				
-		File spritesDir = new File("./src/game/Graphics/Enemies/");
+		File spritesDir = new File("./src/game/Graphics/Enemies/Invaders/");
 		File[] spritesList = spritesDir.listFiles();
 		for (int i = 0; i < spritesList.length; i++) {
 			try {

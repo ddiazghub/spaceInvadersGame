@@ -74,7 +74,12 @@ public class Player extends Character {
 	}
 	
 	public void respawn() {
+		respawn(1);
+	}
+	
+	public void respawn(int hp) {
 		this.lives--;
+		this.heal(hp);
 		this.resetPosition();
 		this.dead = false;
 	}

@@ -44,10 +44,6 @@ public abstract class Enemy extends Character {
 		this.allowMovement = !this.allowMovement;
 	}
 	
-	public int getScore() {
-		return this.score;
-	}
-	
 	public void collision(Player player) {
 		if (player.getBounds().intersects(this.getBounds())) {
 			player.hurt(this.weapon.getDamage());

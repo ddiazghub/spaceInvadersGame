@@ -20,6 +20,7 @@ public class Weapon {
 	private int xPos;
 	private int yPos;
 	private int fireRate;
+	private int multishot = 1;
 	private final GameTimer timer;
 	private double chanceToShoot; 
 	private double fireRatePercent;
@@ -41,6 +42,22 @@ public class Weapon {
 		this.timer.newDelay(1000 / (this.fireRate * this.fireRatePercent));
 		this.chanceToShoot = 1;
 		this.explosions = new ArrayList<>();
+		
+	}
+	
+	public Weapon(int x, int y, int damage, double projectileSpeed, int fireRate, int multishot, String shootingDirection, String imagePath) {
+		
+		this.xPos = x;
+		this.yPos = y;
+		this.fireRate = fireRate;
+		this.fireRatePercent = 1;
+		this.projectileStream = new ArrayList<>();
+		this.projectile = new Projectile(x, y, damage, projectileSpeed, shootingDirection, imagePath);
+		this.timer = new GameTimer();
+		this.timer.newDelay(1000 / (this.fireRate * this.fireRatePercent));
+		this.chanceToShoot = 1;
+		this.explosions = new ArrayList<>();
+		this.multishot = multishot;
 		
 	}
 	
@@ -86,6 +103,22 @@ public class Weapon {
 		this.timer.newDelay(1000 / (this.fireRate * this.fireRatePercent));
 		this.chanceToShoot = chanceToShoot;
 		this.explosions = new ArrayList<>();
+		
+	}
+	
+	public Weapon(int x, int y, int damage, double projectileSpeed, double fireRatePercent, double chanceToShoot, int multishot, String shootingDirection, String imagePath) {
+		
+		this.xPos = x;
+		this.yPos = y;
+		this.fireRate = 1;
+		this.fireRatePercent = fireRatePercent;
+		this.projectileStream = new ArrayList<>();
+		this.projectile = new Projectile(-1000, 1000, damage, projectileSpeed, shootingDirection, imagePath);
+		this.timer = new GameTimer();
+		this.timer.newDelay(1000 / (this.fireRate * this.fireRatePercent));
+		this.chanceToShoot = chanceToShoot;
+		this.explosions = new ArrayList<>();
+		this.multishot = multishot;
 		
 	}
 	
@@ -139,7 +172,18 @@ public class Weapon {
 			Random random = new Random();
 			double rand = random.nextFloat();
 			if (rand > 1 - this.chanceToShoot) {
-				this.projectileStream.add(new Projectile(this.getX(), this.getY(), this.projectile.getDamage(), this.projectile.getSpeedY(), this.projectile.getDirection(), this.projectile.getSprite()));
+				if (multishot % 2 != 0) {
+					this.projectileStream.add(new Projectile(this.getX(), this.getY(), this.projectile.getDamage(), this.projectile.getSpeedY(), this.projectile.getDirection(), this.projectile.getSprite()));
+					for (int i = 0; i < (multishot - 1) / 2; i++) {
+						this.projectileStream.add(new Projectile(this.getX() - this.projectile.width * 2 * (i + 1), this.getY(), this.projectile.getDamage(), this.projectile.getSpeedY(), this.projectile.getDirection(), this.projectile.getSprite()));
+						this.projectileStream.add(new Projectile(this.getX() + this.projectile.width * 2 * (i + 1), this.getY(), this.projectile.getDamage(), this.projectile.getSpeedY(), this.projectile.getDirection(), this.projectile.getSprite()));
+					}
+				} else {
+					for (int i = 0; i < multishot / 2; i++) {
+						this.projectileStream.add(new Projectile(this.getX() - this.projectile.width * 2 * (i + 1), this.getY(), this.projectile.getDamage(), this.projectile.getSpeedY(), this.projectile.getDirection(), this.projectile.getSprite()));
+						this.projectileStream.add(new Projectile(this.getX() + this.projectile.width * 2 * (i + 1), this.getY(), this.projectile.getDamage(), this.projectile.getSpeedY(), this.projectile.getDirection(), this.projectile.getSprite()));
+					}
+				}
 			}
 			this.timer.reset();
 		}
