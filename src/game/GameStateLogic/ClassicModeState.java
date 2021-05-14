@@ -5,6 +5,7 @@
  */
 package game.GameStateLogic;
 
+import game.Components.Collectable;
 import game.Core.GamePanel;
 import java.awt.Color;
 import java.awt.Font;
@@ -38,6 +39,10 @@ public class ClassicModeState extends GameState {
 	private GameTimer respawnTimer;
 	private DifficultyScaling scaling;
 	private HashMap<String, Sound> sounds;
+	private GameTimer collectableSpawnTimer;
+	private ArrayList<Collectable> collectables;
+	private ArrayList<Collectable> collectablesToRemove;
+	private HashMap<String, Integer> collectablesSpawnRates;
 	private boolean paused;
 
 	public ClassicModeState(GameStateManager stateManager) {
@@ -62,6 +67,21 @@ public class ClassicModeState extends GameState {
 		this.music = new Sound("./src/game/Sound/Music/game.wav");
 		this.music.play(true);
 		this.paused = false;
+		
+		this.collectableSpawnTimer = new GameTimer();
+		this.collectableSpawnTimer.newDelay(5000);
+		this.collectables = new ArrayList<>();
+		this.collectablesToRemove = new ArrayList<>();
+		this.collectablesSpawnRates = new HashMap<>();
+		this.collectablesSpawnRates.put("hp", 17);
+		this.collectablesSpawnRates.put("maxHp", 14);
+		this.collectablesSpawnRates.put("speed", 14);
+		this.collectablesSpawnRates.put("damage", 12);
+		this.collectablesSpawnRates.put("firerate", 10);
+		this.collectablesSpawnRates.put("red_laser", 10);
+		this.collectablesSpawnRates.put("blue_laser", 10);
+		this.collectablesSpawnRates.put("missile", 8);
+		this.collectablesSpawnRates.put("blue_plasma", 5);
 	}
 
 	public void tick() {

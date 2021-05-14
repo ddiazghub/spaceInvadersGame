@@ -7,6 +7,7 @@ package game.Components;
 
 import java.awt.Image;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 
 /**
@@ -41,6 +42,10 @@ public class Animation {
 	public void render(Graphics g) {
 		if (this.stopped) return;
 		g.drawImage(animation, x, y, width, height, null);
+	}
+	
+	public Rectangle getBounds() {
+		return new Rectangle(this.x, this.y, this.width, this.height);
 	}
 	
 	public boolean ended() {

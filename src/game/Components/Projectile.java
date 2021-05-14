@@ -7,7 +7,9 @@ package game.Components;
 
 import game.Core.GamePanel;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.geom.AffineTransform;
 
 /**
  *
@@ -58,7 +60,17 @@ public class Projectile extends Entity {
 	}
 	public void render(Graphics g) {
 		if (this.visible) {
-			g.drawImage(sprite, xPos, yPos, null);
+			if (this.direction.equals("up")) {
+				Graphics2D g2d = (Graphics2D) g.create();
+				AffineTransform old = g2d.getTransform();
+				g2d.rotate(Math.toRadians(180), xPos, yPos);
+				g2d.drawImage(sprite, xPos, yPos, null);
+				g2d.rotate(Math.toRadians(-180), xPos, yPos);
+				g2d.setTransform(old);
+				g2d.dispose();
+			} else {
+				g.drawImage(sprite, xPos, yPos, null);
+			}
 		}
 	}
 	public boolean isOutOfBounds() {

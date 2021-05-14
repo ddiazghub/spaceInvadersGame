@@ -10,6 +10,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.io.File;
+import java.util.HashMap;
 import java.util.Random;
 import javax.imageio.ImageIO;
 
@@ -19,6 +20,7 @@ import javax.imageio.ImageIO;
  */
 public class Collectable {
 	
+	private HashMap<String, Projectile> projectiles;
 	private Image sprite;
 	private String type;
 	private int xPos;
@@ -28,7 +30,6 @@ public class Collectable {
 	
 	public Collectable(String type) {
 		
-		System.out.println(type);
 		this.type = type;
 		String imagePath = "";
 		switch (type) {
@@ -50,10 +51,25 @@ public class Collectable {
 				
 			case "damage":
 				imagePath = "./src/game/Graphics/Collectables/damage.png";
+				break;
+				
+			case "red_laser":
+				imagePath = "./src/game/Graphics/Collectables/red_laser.png";
+				break;
+				
+			case "blue_laser":
+				imagePath = "./src/game/Graphics/Collectables/blue_laser.png";
+				break;
+				
+			case "missile":
+				imagePath = "./src/game/Graphics/Collectables/missile.png";
+				break;
+				
+			case "blue_plasma":
+				imagePath = "./src/game/Graphics/Collectables/blue_plasma.png";
 		}
 		
 		try {
-			System.out.println(imagePath);
 			this.sprite = ImageIO.read(new File(imagePath));
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -89,6 +105,7 @@ public class Collectable {
 		boolean collision = player.getBounds().intersects(this.getBounds());
 		if (collision) {
 			new Sound("./src/game/Sound/SoundEffects/collectable.wav").play(false);
+			Weapon playerWeapon = player.getWeapon();
 			switch (type) {
 			case "hp":
 				player.heal(player.getMaxHp() / 3);
@@ -105,12 +122,66 @@ public class Collectable {
 				
 			case "firerate":
 				double fireRateMultiplier = player.getWeapon().getFireRateMultiplier();
-				player.getWeapon().setFireRateMultiplier(fireRateMultiplier + fireRateMultiplier * 0.25);
+				playerWeapon.setFireRateMultiplier(fireRateMultiplier + fireRateMultiplier * 0.25);
 				break;
 				
 			case "damage":
-				double multiplier = player.getWeapon().getDamageMultiplier();
-				player.getWeapon().setDamageMultiplier(multiplier + multiplier * 0.3);
+				double multiplier = playerWeapon.getDamageMultiplier();
+				playerWeapon.setDamageMultiplier(multiplier + multiplier * 0.3);
+				break;
+				
+			case "red_laser":
+				if (playerWeapon.getType().equals("red_laser")) {
+					if (playerWeapon.getMultishot() < 5) playerWeapon.addShot();
+				} else {
+					playerWeapon.resetMultishot();
+					playerWeapon.newProjectile(-1000, -1000, 25, 10, "up", "./src/game/Graphics/Projectiles/red_laser.png");
+					playerWeapon.setFireRate(2);
+					playerWeapon.setSoundEffect(new Sound("./src/game/Sound/SoundEffects/laser.wav"));
+					playerWeapon.addShot();
+					playerWeapon.setType("red_laser");
+					playerWeapon.setExplosive(false);
+				}
+				break;
+				
+			case "blue_laser":
+				if (playerWeapon.getType().equals("blue_laser")) {
+					if (playerWeapon.getMultishot() < 4) playerWeapon.addShot();
+				} else {
+					playerWeapon.resetMultishot();
+					playerWeapon.newProjectile(-1000, -1000, 10, 10, "up", "./src/game/Graphics/Projectiles/blue_laser.png");
+					playerWeapon.setFireRate(7);
+					playerWeapon.setSoundEffect(new Sound("./src/game/Sound/SoundEffects/laser.wav"));
+					playerWeapon.setType("blue_laser");
+					playerWeapon.setExplosive(false);
+				}
+				break;
+				
+			case "missile":
+				if (playerWeapon.getType().equals("missile")) {
+					if (playerWeapon.getMultishot() < 3) playerWeapon.addShot();
+				} else {
+					playerWeapon.resetMultishot();
+					playerWeapon.newProjectile(-1000, -1000, 45, 10, "up", "./src/game/Graphics/Projectiles/missile.png");
+					playerWeapon.setFireRate(1);
+					playerWeapon.setSoundEffect(new Sound("./src/game/Sound/SoundEffects/shot.wav"));
+					playerWeapon.setExplosive(true);
+					playerWeapon.setType("missile");
+				}
+				break;
+				
+			case "blue_plasma":
+				if (playerWeapon.getType().equals("blue_plasma")) {
+					if (playerWeapon.getMultishot() < 3) playerWeapon.addShot();
+				} else {
+					playerWeapon.resetMultishot();
+					playerWeapon.newProjectile(-1000, -1000, 15, 10, "up", "./src/game/Graphics/Projectiles/blue_plasma.png");
+					playerWeapon.setFireRate(4);
+					playerWeapon.setSoundEffect(new Sound("./src/game/Sound/SoundEffects/laser.wav"));
+					playerWeapon.setExplosive(true);
+					playerWeapon.setType("blue_plasma");
+				}
+				break;
 			}
 		}
 		return collision;

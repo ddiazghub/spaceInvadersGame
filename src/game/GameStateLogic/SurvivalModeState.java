@@ -79,7 +79,7 @@ public class SurvivalModeState extends GameState{
 		this.music = new Sound("./src/game/Sound/Music/game.wav");
 		this.music.play(true);
 		this.bossMusic = new Sound("./src/game/Sound/Music/boss.wav");
-		this.enemiesToSpawn = 0;
+		this.enemiesToSpawn = 60;
 		this.spawnedEnemies = 0;
 		this.maxNumberOfEnemies = 20;
 		this.sounds = new HashMap<>();
@@ -91,11 +91,15 @@ public class SurvivalModeState extends GameState{
 		this.collectables = new ArrayList<>();
 		this.collectablesToRemove = new ArrayList<>();
 		this.collectablesSpawnRates = new HashMap<>();
-		this.collectablesSpawnRates.put("hp", 30);
-		this.collectablesSpawnRates.put("maxHp", 20);
-		this.collectablesSpawnRates.put("speed", 20);
-		this.collectablesSpawnRates.put("damage", 15);
-		this.collectablesSpawnRates.put("firerate", 15);
+		this.collectablesSpawnRates.put("hp", 17);
+		this.collectablesSpawnRates.put("maxHp", 14);
+		this.collectablesSpawnRates.put("speed", 14);
+		this.collectablesSpawnRates.put("damage", 12);
+		this.collectablesSpawnRates.put("firerate", 10);
+		this.collectablesSpawnRates.put("red_laser", 10);
+		this.collectablesSpawnRates.put("blue_laser", 10);
+		this.collectablesSpawnRates.put("missile", 8);
+		this.collectablesSpawnRates.put("blue_plasma", 5);
 		
 	}
 
@@ -143,9 +147,9 @@ public class SurvivalModeState extends GameState{
 		
 		this.player.tick();
 		
+		this.player.getWeapon().collision(enemies);
 		for (CharacterEntity enemy: enemies) {
 			enemy.tick();
-			this.player.getWeapon().collision(enemy);
 			enemy.getWeapon().collision(player);
 			enemy.collision(player);
 			if (enemy.isDead()) {

@@ -24,8 +24,8 @@ import java.util.ArrayList;
  */
 public class YellowBoss extends Enemy {
 	
-	private ArrayList<YellowBoss2> helpers;
-	private ArrayList<YellowBoss2> deadHelpers;
+	private ArrayList<CharacterEntity> helpers;
+	private ArrayList<CharacterEntity> deadHelpers;
 	private Player player;
 	private boolean spawnedHelpers = false;
 	private boolean teleported = false;
@@ -48,11 +48,11 @@ public class YellowBoss extends Enemy {
 		if (this.helpers.size() > 0) {
 			this.setVisible(false);
 			this.invulnerable(10000000);
-			for (YellowBoss2 helper: helpers) {
+			for (CharacterEntity helper: helpers) {
 				helper.tick();
 				if (helper.isDead()) deadHelpers.add(helper);
 			}
-			for (YellowBoss2 helper: deadHelpers) helpers.remove(helper);
+			for (CharacterEntity helper: deadHelpers) helpers.remove(helper);
 			return;
 		} else {
 			this.setVisible(true);
@@ -88,7 +88,7 @@ public class YellowBoss extends Enemy {
 	@Override
 	public void render(Graphics g) {
 		
-		for (YellowBoss2 helper: helpers) helper.render(g);
+		for (CharacterEntity helper: helpers) helper.render(g);
 
 		if (this.visible) {
 			if (!this.vulnerable) {
@@ -107,10 +107,10 @@ public class YellowBoss extends Enemy {
 	
 	@Override
 	public void collision(CharacterEntity entity) {
-		for (YellowBoss2 helper: helpers) {
+		for (CharacterEntity helper: helpers) {
 			helper.collision(entity);
-			entity.getWeapon().collision(helper);
 		}
+		entity.getWeapon().collision(helpers);
 		if (entity.getBounds().intersects(this.getBounds())) {
 			entity.hurt(this.weapon.getDamage() * 100000);
 		}

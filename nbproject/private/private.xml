@@ -15,12 +15,14 @@
             <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/Components/Player.java</file>
             <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/Components/Animation.java</file>
             <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/Components/Enemies/InvaderGroup.java</file>
+            <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/Components/Enemies/Blue1.java</file>
             <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/GameStateLogic/ConfigMenuState.java</file>
             <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/Components/Enemies/Invader.java</file>
             <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/GameStateLogic/GameOverState.java</file>
             <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/Core/GlobalOptions.java</file>
             <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/Components/DifficultyScaling.java</file>
             <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/Components/Enemies/YellowBoss2.java</file>
+            <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/Components/Collectable.java</file>
             <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/Components/GameTimer.java</file>
             <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/GameStateLogic/MultiplayerModeState.java</file>
             <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/Components/Enemies/RedBoss.java</file>
@@ -31,6 +33,7 @@
             <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/GameStateLogic/GameStateManager.java</file>
             <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/GameStateLogic/AboutState.java</file>
             <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/Components/Entity.java</file>
+            <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/Components/Sound.java</file>
             <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/Graphics/Player/player_placeholder.png</file>
             <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/Components/ScoreCounter.java</file>
             <file>file:/C:/Users/david/Documents/NetBeansProjects/game/src/game/Graphics/Player/DurrrSpaceShip.png</file>
