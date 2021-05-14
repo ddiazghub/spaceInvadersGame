@@ -79,9 +79,9 @@ public class SurvivalModeState extends GameState{
 		this.music = new Sound("./src/game/Sound/Music/game.wav");
 		this.music.play(true);
 		this.bossMusic = new Sound("./src/game/Sound/Music/boss.wav");
-		this.enemiesToSpawn = 60;
+		this.enemiesToSpawn = 40;
 		this.spawnedEnemies = 0;
-		this.maxNumberOfEnemies = 20;
+		this.maxNumberOfEnemies = 15;
 		this.sounds = new HashMap<>();
 		this.sounds.put("pause", new Sound("./src/game/Sound/SoundEffects/menu_back.wav"));
 		this.boss = false;
@@ -186,8 +186,8 @@ public class SurvivalModeState extends GameState{
 		
 		this.collectablesToRemove.clear();
 		
-		if (this.collectableSpawnTimer.delayFinished() && new Random().nextFloat() > 0) {
-			this.collectables.add(new Collectable(pickRandomWithRates(this.collectablesSpawnRates)));
+		if (this.collectableSpawnTimer.delayFinished()) {
+			if (new Random().nextFloat() >= 0.30) this.collectables.add(new Collectable(pickRandomWithRates(this.collectablesSpawnRates)));
 			this.collectableSpawnTimer.reset();
 		}
 		
