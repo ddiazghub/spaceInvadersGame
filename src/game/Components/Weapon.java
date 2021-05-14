@@ -23,103 +23,112 @@ public class Weapon {
 	private int multishot = 1;
 	private final GameTimer timer;
 	private double chanceToShoot; 
-	private double fireRatePercent;
+	private double fireRateMultiplier;
+	private double damageMultiplier;
 	private final ArrayList<Projectile> projectileStream;
 	private Projectile projectile;
 	private ArrayList<Animation> explosions;
 	private ArrayList<Animation> finishedExplosions = new ArrayList<>();
+	private Sound soundEffect;
 
 	
-	public Weapon(int x, int y, int damage, double projectileSpeed, int fireRate, String shootingDirection, String imagePath) {
+	public Weapon(int x, int y, int damage, double projectileSpeed, int fireRate, String shootingDirection, String imagePath, Sound soundEffect) {
 		
 		this.xPos = x;
 		this.yPos = y;
 		this.fireRate = fireRate;
-		this.fireRatePercent = 1;
+		this.fireRateMultiplier = 1;
+		this.damageMultiplier = 1;
 		this.projectileStream = new ArrayList<>();
 		this.projectile = new Projectile(x, y, damage, projectileSpeed, shootingDirection, imagePath);
 		this.timer = new GameTimer();
-		this.timer.newDelay(1000 / (this.fireRate * this.fireRatePercent));
+		this.timer.newDelay(1000 / (this.fireRate * this.fireRateMultiplier));
 		this.chanceToShoot = 1;
 		this.explosions = new ArrayList<>();
+		this.soundEffect = soundEffect;
 		
 	}
 	
-	public Weapon(int x, int y, int damage, double projectileSpeed, int fireRate, int multishot, String shootingDirection, String imagePath) {
+	public Weapon(int x, int y, int damage, double projectileSpeed, int fireRate, int multishot, String shootingDirection, String imagePath, Sound soundEffect) {
 		
 		this.xPos = x;
 		this.yPos = y;
 		this.fireRate = fireRate;
-		this.fireRatePercent = 1;
+		this.fireRateMultiplier = 1;
+		this.damageMultiplier = 1;
 		this.projectileStream = new ArrayList<>();
 		this.projectile = new Projectile(x, y, damage, projectileSpeed, shootingDirection, imagePath);
 		this.timer = new GameTimer();
-		this.timer.newDelay(1000 / (this.fireRate * this.fireRatePercent));
+		this.timer.newDelay(1000 / (this.fireRate * this.fireRateMultiplier));
 		this.chanceToShoot = 1;
 		this.explosions = new ArrayList<>();
 		this.multishot = multishot;
-		
+		this.soundEffect = soundEffect;
 	}
 	
-	public Weapon(int x, int y, int damage, double projectileSpeed, int fireRate, double chanceToShoot, String shootingDirection, String imagePath) {
+	public Weapon(int x, int y, int damage, double projectileSpeed, int fireRate, double chanceToShoot, String shootingDirection, String imagePath, Sound soundEffect) {
 		
 		this.xPos = x;
 		this.yPos = y;
 		this.fireRate = fireRate;
-		this.fireRatePercent = 1;
+		this.damageMultiplier = 1;
+		this.fireRateMultiplier = 1;
 		this.projectileStream = new ArrayList<>();
 		this.projectile = new Projectile(x, y, damage, projectileSpeed, shootingDirection, imagePath);
 		this.timer = new GameTimer();
-		this.timer.newDelay(1000 / (this.fireRate * this.fireRatePercent));
+		this.timer.newDelay(1000 / (this.fireRate * fireRateMultiplier));
 		this.chanceToShoot = chanceToShoot;
 		this.explosions = new ArrayList<>();
-		
+		this.soundEffect = soundEffect;
 	}
 	
-	public Weapon(int x, int y, int damage, double projectileSpeed, double fireRatePercent, String shootingDirection, String imagePath) {
+	public Weapon(int x, int y, int damage, double projectileSpeed, double fireRatePercent, String shootingDirection, String imagePath, Sound soundEffect) {
 		
 		this.xPos = x;
 		this.yPos = y;
 		this.fireRate = 1;
-		this.fireRatePercent = fireRatePercent;
+		this.damageMultiplier = 1;
+		this.fireRateMultiplier = fireRatePercent;
 		this.projectileStream = new ArrayList<>();
 		this.projectile = new Projectile(-1000, 1000, damage, projectileSpeed, shootingDirection, imagePath);
 		this.timer = new GameTimer();
-		this.timer.newDelay(1000 / (this.fireRate * this.fireRatePercent));
+		this.timer.newDelay(1000 / (this.fireRate * this.fireRateMultiplier));
 		this.chanceToShoot = 1;
 		this.explosions = new ArrayList<>();
-		
+		this.soundEffect = soundEffect;
 	}
 	
-	public Weapon(int x, int y, int damage, double projectileSpeed, double fireRatePercent, double chanceToShoot, String shootingDirection, String imagePath) {
+	public Weapon(int x, int y, int damage, double projectileSpeed, double fireRatePercent, double chanceToShoot, String shootingDirection, String imagePath, Sound soundEffect) {
 		
 		this.xPos = x;
 		this.yPos = y;
 		this.fireRate = 1;
-		this.fireRatePercent = fireRatePercent;
+		this.damageMultiplier = 1;
+		this.fireRateMultiplier = fireRatePercent;
 		this.projectileStream = new ArrayList<>();
 		this.projectile = new Projectile(-1000, 1000, damage, projectileSpeed, shootingDirection, imagePath);
 		this.timer = new GameTimer();
-		this.timer.newDelay(1000 / (this.fireRate * this.fireRatePercent));
+		this.timer.newDelay(1000 / (this.fireRate * this.fireRateMultiplier));
 		this.chanceToShoot = chanceToShoot;
 		this.explosions = new ArrayList<>();
-		
+		this.soundEffect = soundEffect;
 	}
 	
-	public Weapon(int x, int y, int damage, double projectileSpeed, double fireRatePercent, double chanceToShoot, int multishot, String shootingDirection, String imagePath) {
+	public Weapon(int x, int y, int damage, double projectileSpeed, double fireRatePercent, double chanceToShoot, int multishot, String shootingDirection, String imagePath, Sound soundEffect) {
 		
 		this.xPos = x;
 		this.yPos = y;
 		this.fireRate = 1;
-		this.fireRatePercent = fireRatePercent;
+		this.damageMultiplier = 1;
+		this.fireRateMultiplier = fireRatePercent;
 		this.projectileStream = new ArrayList<>();
 		this.projectile = new Projectile(-1000, 1000, damage, projectileSpeed, shootingDirection, imagePath);
 		this.timer = new GameTimer();
-		this.timer.newDelay(1000 / (this.fireRate * this.fireRatePercent));
+		this.timer.newDelay(1000 / (this.fireRate * this.fireRateMultiplier));
 		this.chanceToShoot = chanceToShoot;
 		this.explosions = new ArrayList<>();
 		this.multishot = multishot;
-		
+		this.soundEffect = soundEffect;
 	}
 	
 	public int getX() {
@@ -143,13 +152,6 @@ public class Weapon {
 				this.deleteProjectile(i);
 			}
 		}
-		
-		for (Animation explosion: explosions) {
-			if (explosion.ended()) {
-				this.finishedExplosions.add(explosion);
-			}
-		}
-		
 		for (Animation finishedExplosion: finishedExplosions) {
 			this.explosions.remove(finishedExplosion);
 		}
@@ -165,6 +167,9 @@ public class Weapon {
 		}
 		for (Animation explosion: this.explosions) {
 			explosion.render(g);
+			if (explosion.ended()) {
+				this.finishedExplosions.add(explosion);
+			}
 		}
 	}
 	public void shoot() {
@@ -172,6 +177,7 @@ public class Weapon {
 			Random random = new Random();
 			double rand = random.nextFloat();
 			if (rand > 1 - this.chanceToShoot) {
+				this.soundEffect.play(false);
 				if (multishot % 2 != 0) {
 					this.projectileStream.add(new Projectile(this.getX(), this.getY(), this.projectile.getDamage(), this.projectile.getSpeedY(), this.projectile.getDirection(), this.projectile.getSprite()));
 					for (int i = 0; i < (multishot - 1) / 2; i++) {
@@ -187,6 +193,22 @@ public class Weapon {
 			}
 			this.timer.reset();
 		}
+	}
+	
+	public double getDamageMultiplier() {
+		return this.damageMultiplier;
+	}
+	
+	public void setDamageMultiplier(double multiplier) {
+		this.damageMultiplier = multiplier;
+	}
+	public void setFireRateMultiplier(double multiplier) {
+		this.fireRateMultiplier = multiplier;
+		this.timer.newDelay(1000 / (this.fireRate * this.fireRateMultiplier));
+	}
+	
+	public double getFireRateMultiplier() {
+		return this.fireRateMultiplier;
 	}
 	
 	public boolean hasNoProjectiles() {
@@ -214,14 +236,18 @@ public class Weapon {
 		if (entity.isVulnerable()) {
 			for (int i = 0; i < this.projectileStream.size(); i++) {
 				if (entity.getBounds().intersects(this.projectileStream.get(i).getBounds())) {
-					entity.hurt(this.projectileStream.get(i).getDamage());
+					entity.hurt((int) Math.round(this.projectileStream.get(i).getDamage() * this.damageMultiplier));
 					this.deleteProjectile(i);
 				}
 			}
 		}
 		if (entity.isDead()) {
-			this.explosions.add(new Animation(entity.getX() - entity.getWidth() / 2, entity.getY() - entity.getHeight() / 2, 2 * entity.getWidth(), 2 * entity.getHeight(), "./src/game/Graphics/explosion.gif", 1000));
+			newExplosion(entity);
 		}
+	}
+	
+	public void newExplosion(CharacterEntity entity) {
+		this.explosions.add(new Animation(entity.getX() - entity.getWidth() / 2, entity.getY() - entity.getHeight() / 2, 2 * entity.getWidth(), 2 * entity.getHeight(), "./src/game/Graphics/explosion.gif", 1000, new Sound("./src/game/Sound/SoundEffects/explosion.wav")));
 	}
 }
 

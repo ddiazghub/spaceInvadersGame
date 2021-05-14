@@ -5,6 +5,7 @@
  */
 package game.GameStateLogic;
 
+import game.Components.Sound;
 import game.Core.GamePanel;
 import java.awt.Color;
 import java.awt.Font;
@@ -12,6 +13,7 @@ import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
+import java.util.HashMap;
 
 /**
  *
@@ -19,11 +21,15 @@ import java.awt.event.KeyEvent;
  */
 public class AboutState extends GameState {
 
+	private HashMap<String, Sound> sounds;
 	private String[] text = {"Bienvenido al juego space invaders. Destruye", "la mayor cantidad de aliens que puedas para", "obtener la mejor puntuación. Desarrollado por:", "- David Díaz.", "- Katy Díaz.", "- José Gayón."};
 	private int currentSelection = 0;
 
-	public AboutState(GameStateManager stateManager) {
+	public AboutState(GameStateManager stateManager, Sound music) {
 		super(stateManager);
+		this.music = music;
+		this.sounds = new HashMap<>();
+		this.sounds.put("back", new Sound("./src/game/Sound/SoundEffects/menu_back.wav"));
 	}
 
 	public void init() {
@@ -66,6 +72,7 @@ public class AboutState extends GameState {
 		} else if (enter) {
 
 		} else if (escape) {
+			this.sounds.get("back").play(false);
 			this.stateManager.popState();
 		}
 	}

@@ -5,6 +5,7 @@
  */
 package game.GameStateLogic;
 
+import game.Components.Sound;
 import game.Core.GamePanel;
 import java.awt.Color;
 import java.awt.Font;
@@ -12,6 +13,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
+import java.util.HashMap;
 
 /**
  *
@@ -19,11 +21,17 @@ import java.awt.event.KeyEvent;
  */
 public class GMSelectState extends GameState {
 
+	private HashMap<String, Sound> sounds;
 	private String[] options = {"Clásico", "No se", "Multijugador"};
 	private int currentSelection = 0;
 
-	public GMSelectState(GameStateManager stateManager) {
+	public GMSelectState(GameStateManager stateManager, Sound music) {
 		super(stateManager);
+		this.music = music;
+		this.sounds = new HashMap<>();
+		this.sounds.put("navigation", new Sound("./src/game/Sound/SoundEffects/menu_navigation.wav"));
+		this.sounds.put("selection", new Sound("./src/game/Sound/SoundEffects/menu_selection.wav"));
+		this.sounds.put("back", new Sound("./src/game/Sound/SoundEffects/menu_back.wav"));
 	}
 
 	public void init() {
@@ -73,6 +81,7 @@ public class GMSelectState extends GameState {
 		boolean up = k == KeyEvent.VK_W;
 		boolean enter = k == KeyEvent.VK_ENTER;
 		boolean esc = k == KeyEvent.VK_ESCAPE;
+		if (down || up) this.sounds.get("navigation").play(false);
 		if (down) {
 			this.currentSelection++;
 			if (this.currentSelection >= options.length) {
@@ -84,6 +93,8 @@ public class GMSelectState extends GameState {
 				this.currentSelection += options.length;
 			}
 		} else if (enter) {
+			this.sounds.get("selection").play(false);
+			this.music.stop();
 			switch (this.currentSelection) {
 				case 0:
 					stateManager.pushState(new ClassicModeState(stateManager));
@@ -95,6 +106,7 @@ public class GMSelectState extends GameState {
 					stateManager.pushState(new MultiplayerModeState(stateManager));
 			}
 		} else if (esc) {
+			this.sounds.get("back").play(false);
 			stateManager.popState();
 		}
 	}

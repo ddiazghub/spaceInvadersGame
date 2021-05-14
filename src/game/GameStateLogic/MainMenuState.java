@@ -12,7 +12,8 @@ import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
-import game.Components.Animation;
+import game.Components.Sound;
+import java.util.HashMap;
 
 /**
  *
@@ -20,18 +21,25 @@ import game.Components.Animation;
  */
 public class MainMenuState extends GameState {
 	
+	private HashMap<String, Sound> sounds;
 	private String[] options = {"Jugar", "Configuración", "Acerca del juego", "Cerrar juego"};
 	private int currentSelection;
 	
 	public MainMenuState(GameStateManager stateManager) {
 		super(stateManager);
 		this.currentSelection = 0;
+		music = new Sound("./src/game/Sound/Music/menu.wav");
+		music.play(true);
+		this.sounds = new HashMap<>();
+		this.sounds.put("navigation", new Sound("./src/game/Sound/SoundEffects/menu_navigation.wav"));
+		this.sounds.put("selection", new Sound("./src/game/Sound/SoundEffects/menu_selection.wav"));
 	}
 	
-	public void init() {}
+	public void init() {
+	}
 	
 	public void tick() {
-		
+		if (!this.music.isPlaying()) this.music.play(true);
 	}
 	
 	public void render(Graphics g) {
@@ -65,6 +73,7 @@ public class MainMenuState extends GameState {
 		boolean down = k == KeyEvent.VK_S;
 		boolean up = k == KeyEvent.VK_W;
 		boolean enter = k == KeyEvent.VK_ENTER;
+		if (down || up) this.sounds.get("navigation").play(false);
 		if (down) {
 			this.currentSelection++;
 			if (this.currentSelection >= options.length) {
@@ -76,15 +85,16 @@ public class MainMenuState extends GameState {
 				this.currentSelection += options.length;
 			}
 		} else if (enter) {
+			this.sounds.get("selection").play(false);
 			switch (this.currentSelection) {
 				case 0:
-					stateManager.pushState(new GMSelectState(stateManager));
+					stateManager.pushState(new GMSelectState(stateManager, music));
 					break;
 				case 1:
-					stateManager.pushState(new ConfigMenuState(stateManager));
+					stateManager.pushState(new ConfigMenuState(stateManager, music));
 					break;
 				case 2:
-					stateManager.pushState(new AboutState(stateManager));
+					stateManager.pushState(new AboutState(stateManager, music));
 					break;
 				case 3:
 					System.exit(0);

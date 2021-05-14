@@ -6,6 +6,7 @@
 package game.Components.Enemies;
 
 import game.Components.Enemy;
+import game.Components.Sound;
 import game.Components.Weapon;
 import game.Core.GamePanel;
 
@@ -19,7 +20,9 @@ public class RedBoss extends Enemy {
 	private int xDir;
 	
 	public RedBoss(int x, int y) {
-		super(x, y, 300, 3, 1, 100, new Weapon(-1000, 1000, 30, 4, 2, 0.3, 6, "down", "./src/game/Graphics/Projectiles/shock.png"), "./src/game/Graphics/Enemies/red_boss.png");
+		super(x, y, 300, 3, 1, 100, 
+			new Weapon(-1000, 1000, 30, 4, 2, 0.3, 6, "down", "./src/game/Graphics/Projectiles/shock.png", 
+			new Sound("./src/game/Sound/SoundEffects/shot.wav")), "./src/game/Graphics/Enemies/red_boss.png");
 		this.shooting = true;
 		this.xDir = 1;
 	}

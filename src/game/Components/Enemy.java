@@ -17,18 +17,16 @@ public abstract class Enemy extends Character {
 	protected boolean allowMovement;
 	protected long lastMoveTime;
 	protected int lastMoveX;
-	protected int score;
 	protected int lastMoveY;
 
 	public Enemy(int x, int y, int hp, double xSpeed, double ySpeed, int score, Weapon weapon, String imagePath) {
 
-		super(x, y, hp, xSpeed, ySpeed, weapon, imagePath);
+		super(x, y, hp, xSpeed, ySpeed, score, weapon, imagePath);
 		this.behavior = behavior;
 		this.right = false;
 		this.left = false;
 		this.down = false;
 		this.shooting = false;
-		this.score = score;
 		this.allowMovement = false;
 		this.lastMoveTime = System.currentTimeMillis();
 
@@ -43,15 +41,9 @@ public abstract class Enemy extends Character {
 	public void toggleMovement() {
 		this.allowMovement = !this.allowMovement;
 	}
-	
-	public void collision(Player player) {
-		if (player.getBounds().intersects(this.getBounds())) {
-			player.hurt(this.weapon.getDamage());
-			System.out.println("COLLISION DETECTED");
-		}
-	}
 
 	public boolean canMove() {
 		return this.allowMovement;
 	}
+	
 }

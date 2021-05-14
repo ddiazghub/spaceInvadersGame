@@ -10,6 +10,7 @@ package game.Components.Enemies;
  * @author david
  */
 import game.Components.Enemy;
+import game.Components.Sound;
 import game.Components.Weapon;
 import game.Core.GamePanel;
 
@@ -18,9 +19,11 @@ public class Invader extends Enemy {
 	private int row;
 	private int xDir;
 	public Invader(int x, int y, int initialRow) {
-		super(x, y, 1, 1, 3, 100, new Weapon(-1000, 1000, 1, 4, 0.5, 0.2, "down", "./src/game/Graphics/Projectiles/shock.png"), "./src/game/Graphics/Enemies/Invaders/alienB.png");
+		super(x, y, 1, 1, 3, 10, new Weapon(-1000, 1000, 1, 4, 0.5, 0.2, "down", "./src/game/Graphics/Projectiles/shock.png", new Sound("./src/game/Sound/SoundEffects/shot.wav")), "./src/game/Graphics/Enemies/Invaders/alienB.png");
 		this.row = initialRow;
 		this.xDir = 1;
+		this.spawn.stop();
+		this.spawn = null;		
 	}
 	
 	public void tick() {

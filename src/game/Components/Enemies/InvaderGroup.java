@@ -60,8 +60,6 @@ public class InvaderGroup {
 			} catch (Exception e) {
 				System.out.println(e.getStackTrace());
 			}
-			System.out.println(spritesList[i].getPath());
-			System.out.println(spritesList[i].getAbsolutePath());
 		}
 	}
 	
@@ -79,6 +77,7 @@ public class InvaderGroup {
 	public void killInvader(Invader invader) {
 		for (int i = 0; i < this.invaderColumns.size() - 1; i++) {
 			this.invaderColumns.get(i).remove(invader);
+			if (this.invaderColumns.get(i).size() > 0) this.invaderColumns.get(i).peek().allowShooting();
 		}
 		this.invaders.remove(invader);
 	}
@@ -153,10 +152,9 @@ public class InvaderGroup {
 			this.hitEdge = false;
 		}
 		
-		if (this.invaders.size() < 3) {
+		if (this.invaders.size() < 2) {
 			this.speedMultiplier(5 * this.speedMultiplier);
-		}
-		if (this.invaders.size() < 5) {
+		} else if (this.invaders.size() < 5) {
 			this.speedMultiplier(4 * this.speedMultiplier);
 		} else if (this.invaders.size() < 10) {
 			this.speedMultiplier(3 * this.speedMultiplier);

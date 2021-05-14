@@ -62,7 +62,7 @@ public class Projectile extends Entity {
 		}
 	}
 	public boolean isOutOfBounds() {
-		return this.xPos < -300 || this.xPos > 300 + GamePanel.WIDTH || this.yPos < -300 || this.xPos > 300 + GamePanel.HEIGHT;
+		return this.xPos < -300 || this.xPos > 300 + GamePanel.WIDTH || this.yPos < -100 || this.xPos > 300 + GamePanel.HEIGHT;
 	}
 }
 

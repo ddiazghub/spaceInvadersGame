@@ -36,5 +36,8 @@ public interface CharacterEntity {
 	public int getScore();
 	public void stop(long durationm);
 	public void stop();
+	public void collision(CharacterEntity entity);
+	public int getHp();
+	public int getMaxHp();
 	
 }

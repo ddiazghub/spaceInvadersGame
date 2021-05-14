@@ -9,10 +9,12 @@ package game.GameStateLogic;
  *
  * @author david
  */
+import game.Components.Sound;
 import java.awt.Graphics;
 
 public abstract class GameState {
 	
+	protected Sound music;
 	protected GameStateManager stateManager;
 	
 	public GameState(GameStateManager stateManager) {

@@ -14,6 +14,7 @@ import java.awt.Graphics;
 public abstract class Character extends Entity implements CharacterEntity {
 	
 	protected int hp;
+	protected int maxHp;
 	protected boolean hasWeapon;
 	protected Weapon weapon;
 	protected boolean shooting;
@@ -24,10 +25,12 @@ public abstract class Character extends Entity implements CharacterEntity {
 	protected int score = 0;
 	protected GameTimer invulnerabilityTimer;
 	protected GameTimer invulnerabilityAnimTimer;
+	protected Animation spawn;
 	
 	public Character(int x, int y, int hp, double xSpeed, double ySpeed, Weapon weapon, String imagePath) {
 		super(x, y, imagePath);
 		this.hp = hp;
+		this.maxHp = hp;
 		this.xSpeed = xSpeed;
 		this.ySpeed = ySpeed;
 		this.hasWeapon = weapon != null;
@@ -36,6 +39,24 @@ public abstract class Character extends Entity implements CharacterEntity {
 		this.invulnerabilityTimer = new GameTimer();
 		this.invulnerabilityAnimTimer = new GameTimer();
 		this.invulnerabilityAnimTimer.newDelay(400);
+		this.spawn = new Animation(x + width / 2 - height, y + height / 2 - height, 2 * width, 2 * height, "./src/game/Graphics/portal.gif", 500, new Sound("./src/game/Sound/SoundEffects/teleportation.wav"));
+		
+	}
+	
+	public Character(int x, int y, int hp, double xSpeed, double ySpeed, int score, Weapon weapon, String imagePath) {
+		super(x, y, imagePath);
+		this.hp = hp;
+		this.maxHp = hp;
+		this.xSpeed = xSpeed;
+		this.ySpeed = ySpeed;
+		this.hasWeapon = weapon != null;
+		this.weapon = weapon;
+		this.vulnerable = true;
+		this.score = score;
+		this.invulnerabilityTimer = new GameTimer();
+		this.invulnerabilityAnimTimer = new GameTimer();
+		this.invulnerabilityAnimTimer.newDelay(400);
+		this.spawn = new Animation(x + width / 2 - width, y + height / 2 - height, 2 * width, 2 * height, "./src/game/Graphics/portal.gif", 500, new Sound("./src/game/Sound/SoundEffects/teleportation.wav"));
 	}
 	
 	public abstract void tick();
@@ -54,10 +75,19 @@ public abstract class Character extends Entity implements CharacterEntity {
 				this.weapon.render(g);
 			}
 		}
+		if (this.spawn != null) {
+			if (!this.spawn.ended() ) {
+				spawn.render(g);
+			}
+		}
 	}
 
 	public int getHp() {
 		return this.hp;
+	}
+	
+	public int getMaxHp() {
+		return this.maxHp;
 	}
 
 	public Weapon getWeapon() {
@@ -84,6 +114,7 @@ public abstract class Character extends Entity implements CharacterEntity {
 		boolean dead = this.hp < 1;
 		if (dead) {
 			this.dead = true;
+			this.hp = 0;
 		}
 	}
 	
@@ -97,6 +128,16 @@ public abstract class Character extends Entity implements CharacterEntity {
 	
 	public void heal(int hp) {
 		this.hp += hp;
+		if (this.hp > maxHp) this.hp = maxHp;
+	}
+	
+	public void collision(CharacterEntity entity) {
+		if (entity.getBounds().intersects(this.getBounds())) {
+			entity.hurt(this.weapon.getDamage() * 100000);
+		}
+		if (entity.isDead()) {
+			this.weapon.newExplosion(entity);
+		}
 	}
 	
 	public int getScore() {

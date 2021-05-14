@@ -6,13 +6,16 @@
 package game.GameStateLogic;
 
 import game.Components.CharacterEntity;
+import game.Components.Collectable;
 import game.Components.DifficultyScaling;
 import game.Components.Enemies.Red1;
 import game.Components.Enemies.YellowBoss2;
 import game.Components.Enemies.RedBoss;
+import game.Components.Enemies.YellowBoss;
 import game.Components.GameTimer;
 import game.Components.Player;
 import game.Components.ScoreCounter;
+import game.Components.Sound;
 import game.Components.Weapon;
 import game.Core.GamePanel;
 import java.awt.Color;
@@ -23,6 +26,7 @@ import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Random;
 
 /**
@@ -35,35 +39,64 @@ public class SurvivalModeState extends GameState{
 	private Player player;
 	private ArrayList<CharacterEntity> enemies;
 	private ArrayList<CharacterEntity> deadEnemies;
+	private HashMap<String, Sound> sounds;
 	private ScoreCounter score;
 	private GameTimer startTimer;
 	private GameTimer respawnTimer;
 	private DifficultyScaling scaling;
+	private GameTimer enemySpawnTimer;
+	private GameTimer collectableSpawnTimer;
+	private ArrayList<Collectable> collectables;
+	private ArrayList<Collectable> collectablesToRemove;
+	private HashMap<String, Integer> collectablesSpawnRates;
+	private int enemiesToSpawn;
+	private int spawnedEnemies;
+	private int maxNumberOfEnemies;
+	private boolean boss;
 	private boolean paused;
+	private Sound bossMusic;
 
 	public SurvivalModeState(GameStateManager stateManager) {
 		super(stateManager);
-		init();
 	}
 
 	public void init() {
-		Weapon base = new Weapon(-1000, 1000, 15, 12, 20, "up", "./src/game/Graphics/Projectiles/disparo.png");
+		Weapon base = new Weapon(-1000, 1000, 15, 12, 20, "up", "./src/game/Graphics/Projectiles/disparo.png", new Sound("./src/game/Sound/SoundEffects/shot.wav"));
 		this.enemies = new ArrayList<>();
-		for (int i = 0; i < 5; i++) {
-			this.enemies.add(new YellowBoss2());
-		}
-		
-		this.enemies.add(new RedBoss(400, 200));
+		//this.enemies.add(new YellowBoss(this.player));
 		this.deadEnemies = new ArrayList<>();
 		this.scaling = new DifficultyScaling(false, "log");
 		this.player = new Player(100, 3, base, "./src/game/Graphics/Player/nave2.png");
 		this.score = new ScoreCounter();
 		this.startTimer = new GameTimer();
 		this.respawnTimer = new GameTimer();
+		this.enemySpawnTimer = new GameTimer();
 		this.respawnTimer.newDelay(2500);
 		this.respawnTimer.endDelay();
 		this.startTimer.newDelay(3000);
+		this.enemySpawnTimer.newDelay(1000);
 		this.paused = false;
+		this.music = new Sound("./src/game/Sound/Music/game.wav");
+		this.music.play(true);
+		this.bossMusic = new Sound("./src/game/Sound/Music/xd.wav");
+		this.enemiesToSpawn = 0;
+		this.spawnedEnemies = 0;
+		this.maxNumberOfEnemies = 20;
+		this.sounds = new HashMap<>();
+		this.sounds.put("pause", new Sound("./src/game/Sound/SoundEffects/menu_back.wav"));
+		this.boss = false;
+		
+		this.collectableSpawnTimer = new GameTimer();
+		this.collectableSpawnTimer.newDelay(5000);
+		this.collectables = new ArrayList<>();
+		this.collectablesToRemove = new ArrayList<>();
+		this.collectablesSpawnRates = new HashMap<>();
+		this.collectablesSpawnRates.put("hp", 30);
+		this.collectablesSpawnRates.put("maxHp", 20);
+		this.collectablesSpawnRates.put("speed", 20);
+		this.collectablesSpawnRates.put("damage", 15);
+		this.collectablesSpawnRates.put("firerate", 15);
+		
 	}
 
 	public void tick() {
@@ -80,18 +113,25 @@ public class SurvivalModeState extends GameState{
 		if (!this.startTimer.delayFinished()) return;
 		if (this.respawnTimer.delayFinished()) {
 			if (!this.player.isVisible()) {
-				this.player.invulnerable(2000);
 				this.player.setVisible(true);
 			}
+		}
+		
+		if (enemies.size() == 0 && this.boss) {
+			this.boss = false;
+			this.bossMusic.stop();
+			this.music.play(true);
+			newLevel();
 		}
 	
 		if (this.player.isDead()) {
 			if (this.player.getLives() < 1) {
 				gameOver();
 			} else {
-				this.player.respawn(100);
-				this.stopAllEntities(2500);
+				this.player.invulnerable(4500);
+				this.player.respawn();
 				this.player.setVisible(false);
+				this.player.stop(2500);
 				this.respawnTimer.reset();
 				
 				this.player.getWeapon().clear();
@@ -107,16 +147,52 @@ public class SurvivalModeState extends GameState{
 			enemy.tick();
 			this.player.getWeapon().collision(enemy);
 			enemy.getWeapon().collision(player);
+			enemy.collision(player);
 			if (enemy.isDead()) {
 				this.score.addScore(enemy.getScore());
 				this.deadEnemies.add(enemy);
 			}
-			if (this.player.getBounds().intersects(enemy.getBounds())) gameOver();
 		}
 		for (CharacterEntity enemy: deadEnemies) {
 			enemies.remove(enemy);
 		}
 		
+		if (this.enemySpawnTimer.delayFinished() && this.spawnedEnemies < this.enemiesToSpawn && enemies.size() < this.maxNumberOfEnemies) {
+			double enemiesPerSecond = 1.5 * this.enemiesToSpawn / 60;
+			while (enemiesPerSecond >= 0) {
+				if (new Random().nextDouble() <= enemiesPerSecond) {
+					enemies.add(new Red1());
+					spawnedEnemies++;
+				}
+				enemiesPerSecond--;
+			}
+			this.enemySpawnTimer.reset();
+		}
+		
+		for (Collectable collectable: this.collectables) {
+			collectable.tick();
+			if (collectable.collision(player) || collectable.getY() > GamePanel.WIDTH) {
+				this.collectablesToRemove.add(collectable);
+			}
+		}
+		
+		for (Collectable collectable: this.collectablesToRemove) {
+			this.collectables.remove(collectable);
+		}
+		
+		this.collectablesToRemove.clear();
+		
+		if (this.collectableSpawnTimer.delayFinished() && new Random().nextFloat() > 0) {
+			this.collectables.add(new Collectable(pickRandomWithRates(this.collectablesSpawnRates)));
+			this.collectableSpawnTimer.reset();
+		}
+		
+		if (this.spawnedEnemies >= this.enemiesToSpawn && enemies.size() == 0 && !boss) {
+			enemies.add(new YellowBoss(this.player));
+			this.music.stop();
+			boss = true;
+			this.bossMusic.play(true);
+		}
 		/*
 		if (this.invaders.getInvaders().isEmpty()) {
 			newLevel();
@@ -133,21 +209,43 @@ public class SurvivalModeState extends GameState{
 		for (CharacterEntity enemy: enemies) {
 			enemy.render(g);
 		}
+		for (Collectable collectable: this.collectables) collectable.render(g);
 		
 		for (int i = 0; i < player.getLives(); i++) {
-			g.drawImage(life, 90 + i * 30, 13, null);
+			g.drawImage(life, 570 + i * 30, 13, null);
 		}
 		g.setFont(new Font("Arial", Font.PLAIN, 30));
 		g.setColor(new Color(51, 175, 255));
-		g.drawString("Score: " + this.score.getScore(), 450, 10 + g.getFontMetrics().getHeight() - 10);
-		g.drawString("Lives:", 10, 10 + g.getFontMetrics().getHeight() - 10);
+		g.drawString("Score: " + this.score.getScore(), 800, g.getFontMetrics().getHeight());
+		g.drawString("Lives: ", 485, g.getFontMetrics().getHeight());
 		
+		g.setColor(Color.WHITE);
 		if (!this.startTimer.delayFinished()) {
-			g.setFont(new Font("Arial", Font.PLAIN, 40));
-			g.setColor(Color.WHITE);
+			g.setFont(new Font("Arial", Font.PLAIN, 30));
 			g.drawString("SPACE INVADERS", GamePanel.WIDTH / 2 - g.getFontMetrics().stringWidth("SPACE INVADERS") / 2, 200 + g.getFontMetrics().getHeight());
 			g.drawString("MODO SUPERVIVENCIA", GamePanel.WIDTH / 2 - g.getFontMetrics().stringWidth("MODO SUPERVIVENCIA") / 2, 400 + g.getFontMetrics().getHeight());
 		}
+		
+		g.fillRect(5, 5, 250, 40);
+		int hpBar = (this.player.getHp() * 240) / this.player.getMaxHp();
+		if (hpBar < 60) g.setColor(Color.RED);
+		else if (hpBar < 120) g.setColor(Color.YELLOW);
+		else g.setColor(Color.GREEN);
+		if (this.respawnTimer.delayFinished()) {
+			g.fillRect(10, 10, hpBar, 30);
+			g.drawString("" + this.player.getHp() + "/" + this.player.getMaxHp(), 265, 10 + g.getFontMetrics().getHeight() - 10);
+		} else {
+			g.setColor(Color.RED);
+			g.drawString("" + 0 + "/" + this.player.getMaxHp(), 265, 10 + g.getFontMetrics().getHeight() - 10);
+		}
+		
+		if (boss && enemies.size() > 0) {
+			g.setColor(Color.GRAY);
+			g.fillRect(GamePanel.WIDTH / 2 - 330, 60, 660, 60);
+			g.setColor(Color.RED);
+			int bossHpBar = (this.enemies.get(0).getHp() * 650) / this.enemies.get(0).getMaxHp();
+			g.fillRect(GamePanel.WIDTH / 2 - 325, 65, bossHpBar, 50);
+		} 
 	}
 	
 	public void newLevel() {
@@ -156,14 +254,15 @@ public class SurvivalModeState extends GameState{
 		if (Arrays.binarySearch(levelsFor1Up, (int) this.scaling.getCount()) > -1) {
 			this.player.addLife();
 		}
-		this.player.resetPosition();
 		this.deadEnemies.clear();
+		this.enemiesToSpawn += 20;
+		this.spawnedEnemies = 0;
+		this.maxNumberOfEnemies += 5;
 		/*
 		this.enemies = new InvaderGroup(10, 50, (int) Math.floor(6 + multiplier), (int) Math.floor(9 + multiplier));
 		this.invaders.setSpeedMultiplier(multiplier);
 		*/
 		this.clearProjectiles();
-		this.stopAllEntities(2000);
 	}
 	
 	public void clearProjectiles() {
@@ -180,6 +279,18 @@ public class SurvivalModeState extends GameState{
 		}
 	} 
 	
+	public void addEnemy(CharacterEntity enemy) {
+		this.enemies.add(enemy);
+	}
+	
+	public String pickRandomWithRates(HashMap<String, Integer> data) {
+		ArrayList<String> shuffler = new ArrayList<>();
+		for (String element : data.keySet()) {
+			for (int i = 0; i < data.get(element); i++) shuffler.add(element);
+		}
+		return shuffler.get(new Random().nextInt(shuffler.size()));
+	}
+	
 	public void gameOver() {
 		this.stateManager.pushState(new GameOverState(this.stateManager, "survival"));
 	}
@@ -188,6 +299,7 @@ public class SurvivalModeState extends GameState{
 		this.player.keyPressed(k);
 		boolean esc = k == KeyEvent.VK_ESCAPE;
 		if (esc) {
+			this.sounds.get("pause").play(false);
 			this.paused = true;
 			for (int i = 0; i < enemies.size(); i++) {
 				enemies.get(i).pauseTimers();
@@ -195,7 +307,11 @@ public class SurvivalModeState extends GameState{
 			this.startTimer.pause();
 			this.respawnTimer.pause();
 			this.player.pauseTimers();
-			this.stateManager.pushState(new PauseMenuState(this.stateManager));
+			if (boss) {
+				this.stateManager.pushState(new PauseMenuState(this.stateManager, this.bossMusic));
+			} else {
+				this.stateManager.pushState(new PauseMenuState(this.stateManager, this.music));
+			}
 		}
 	}
 

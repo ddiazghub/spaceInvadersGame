@@ -6,6 +6,7 @@
 package game.Components.Enemies;
 
 import game.Components.Enemy;
+import game.Components.Sound;
 import game.Components.Weapon;
 import game.Core.GamePanel;
 import java.util.Random;
@@ -16,10 +17,10 @@ import java.util.Random;
  */
 public class YellowBoss2 extends Enemy {
 	public YellowBoss2() {
-		super(new Random().nextInt(GamePanel.WIDTH - 50), -500, 1000, 1, 4, 100, new Weapon(-1000, 1000, 7, 4, 1, 0.4, "down", "./src/game/Graphics/Projectiles/shock.png"), "./src/game/Graphics/Enemies/yellow_boss2.png");
+		super(500, -500, 400, 1, 4 + new Random().nextInt(3), 100, new Weapon(-1000, 1000, 7, 4, 1, 0.4, "down", "./src/game/Graphics/Projectiles/shock.png", new Sound("./src/game/Sound/SoundEffects/shot.wav")), "./src/game/Graphics/Enemies/yellow_boss2.png");
 		this.shooting = true;
 		this.xPos = new Random().nextInt(GamePanel.WIDTH - this.width);
-		this.yPos = -this.height;
+		this.yPos = -this.height - new Random().nextInt(200);
 	}
 	
 	public void tick() {
@@ -49,8 +50,10 @@ public class YellowBoss2 extends Enemy {
 	
 	public void move() {
 		if (this.getY() > GamePanel.HEIGHT) {
-			this.yPos = -this.height;
-			this.xPos = new Random().nextInt(GamePanel.WIDTH - this.width);
+			Random rng = new Random();
+			this.ySpeed = 4 + rng.nextInt(3);
+			this.yPos = -this.height - rng.nextInt(200);
+			this.xPos = rng.nextInt(GamePanel.WIDTH - this.width);
 		}
 		this.yPos += this.ySpeed * this.speedMultiplier;
 	}

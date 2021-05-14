@@ -6,6 +6,7 @@
 package game.Components.Enemies;
 
 import game.Components.Enemy;
+import game.Components.Sound;
 import game.Components.Weapon;
 import game.Core.GamePanel;
 import java.util.Random;
@@ -16,7 +17,7 @@ import java.util.Random;
  */
 public class Blue1 extends Enemy {
 	public Blue1() {
-		super(new Random().nextInt(GamePanel.WIDTH - 50), -50, 30, 1, 1, 100, new Weapon(-1000, 1000, 7, 4, 1, 0.4, "down", "./src/game/Graphics/Projectiles/shock.png"), "./src/game/Graphics/Enemies/blue_enemy1.png");
+		super(new Random().nextInt(GamePanel.WIDTH - 50), -50, 30, 1, 1, 100, new Weapon(-1000, 1000, 7, 4, 1, 0.4, "down", "./src/game/Graphics/Projectiles/shock.png", new Sound("./src/game/Sound/SoundEffects/shot.wav")), "./src/game/Graphics/Enemies/blue_enemy1.png");
 		this.shooting = true;
 	}
 	

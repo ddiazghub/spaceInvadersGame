@@ -20,6 +20,8 @@ public class Player extends Character {
 
 		super(GamePanel.WIDTH / 2, GamePanel.HEIGHT - 60, hp, movementSpeed, 0, weapon, imagePath);
 		this.setX(GamePanel.WIDTH / 2 - this.width / 2);
+		this.spawn.stop();
+		this.spawn = null;
 		this.weapon.setY(this.yPos);
 	}
 
@@ -74,12 +76,8 @@ public class Player extends Character {
 	}
 	
 	public void respawn() {
-		respawn(1);
-	}
-	
-	public void respawn(int hp) {
 		this.lives--;
-		this.heal(hp);
+		this.hp = maxHp;
 		this.resetPosition();
 		this.dead = false;
 	}

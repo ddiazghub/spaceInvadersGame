@@ -75,7 +75,6 @@ public class MultiplayerModeState extends GameState{
 				case 0:
 					break;
 				case 1:
-					stateManager.pushState(new ConfigMenuState(stateManager));
 					break;
 				case 2:
 

@@ -58,7 +58,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 			elapsed = System.nanoTime() - lastRender;
 			wait = targetTime - elapsed / 1000000;
 			
-			tick(this.elapsedTime);
+			tick();
 			repaint();
 			
 			if (wait < 0) {
@@ -73,8 +73,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		}
 	}
 	
-	public void tick(long elapsedTime) {
-		// System.out.println("Running, Elapsed Time: " + elapsedTime);
+	public void tick() {
 		this.stateManager.tick();
 	}
 	
@@ -82,7 +81,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		super.paintComponent(g);
 		
 		g.clearRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
-		this.stateManager.render(g);
+		if (this.stateManager != null) this.stateManager.render(g);
 	}
 	
 	public int[] getCenter() {

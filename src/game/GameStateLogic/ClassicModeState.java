@@ -21,6 +21,8 @@ import game.Components.Weapon;
 import game.Components.GameTimer;
 import java.awt.event.KeyEvent;
 import game.Components.ScoreCounter;
+import game.Components.Sound;
+import java.util.HashMap;
 
 /**
  *
@@ -35,15 +37,15 @@ public class ClassicModeState extends GameState {
 	private GameTimer startTimer;
 	private GameTimer respawnTimer;
 	private DifficultyScaling scaling;
+	private HashMap<String, Sound> sounds;
 	private boolean paused;
 
 	public ClassicModeState(GameStateManager stateManager) {
 		super(stateManager);
-		init();
 	}
 
 	public void init() {
-		Weapon base = new Weapon(-1000, 1000, 1, 12, 20, "up", "./src/game/Graphics/Projectiles/disparo.png");
+		Weapon base = new Weapon(-1000, 1000, 1, 12, 20, "up", "./src/game/Graphics/Projectiles/disparo.png", new Sound("./src/game/Sound/SoundEffects/shot.wav"));
 		this.invaders = new InvaderGroup(10, 50, 6, 9);
 		this.deadInvaders = new ArrayList<>();
 		this.scaling = new DifficultyScaling(false, "log");
@@ -54,6 +56,11 @@ public class ClassicModeState extends GameState {
 		this.respawnTimer.newDelay(2500);
 		this.respawnTimer.endDelay();
 		this.startTimer.newDelay(3000);
+		this.sounds = new HashMap<>();
+		this.sounds.put("pause", new Sound("./src/game/Sound/SoundEffects/menu_back.wav"));
+		this.sounds.put("powerup", new Sound("./src/game/Sound/SoundEffects/powerup.wav"));
+		this.music = new Sound("./src/game/Sound/Music/game.wav");
+		this.music.play(true);
 		this.paused = false;
 	}
 
@@ -175,12 +182,13 @@ public class ClassicModeState extends GameState {
 		this.player.keyPressed(k);
 		boolean esc = k == KeyEvent.VK_ESCAPE;
 		if (esc) {
+			this.sounds.get("pause").play(false);
 			this.paused = true;
 			this.invaders.pauseTimers();
 			this.startTimer.pause();
 			this.respawnTimer.pause();
 			this.player.pauseTimers();
-			this.stateManager.pushState(new PauseMenuState(this.stateManager));
+			this.stateManager.pushState(new PauseMenuState(this.stateManager, this.music));
 		}
 	}
 

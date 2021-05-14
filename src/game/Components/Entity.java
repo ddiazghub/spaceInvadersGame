@@ -108,6 +108,10 @@ public abstract class Entity {
 		this.xPos = x;
 	}
 	
+	public double getSpeedMultiplier() {
+		return this.speedMultiplier;
+	}
+	
 	public void setY(int y ) {
 		this.yPos = y;
 	}
