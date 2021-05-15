@@ -16,13 +16,14 @@ import java.util.Random;
  *
  * @author david
  */
-public class Blue1 extends Enemy {
+public class Red3 extends Enemy {
 	
 	private int xDir;
 	
-	public Blue1() {
-		super(-1000, -1000, 30, 1, 4 + new Random().nextInt(3), 100, new Weapon(-1000, 1000, 7, 4, 1, 0.4, "down", "./src/game/Graphics/Projectiles/blue_laser.png", new Sound("./src/game/Sound/SoundEffects/laser.wav")), "./src/game/Graphics/Enemies/blue_enemy1.png");
+	public Red3() {
+		super(-1000, -1000, 30, 1, 2 + new Random().nextInt(2), 100, new Weapon(-1000, 1000, 7, 4, 1, 0.4, "down", "./src/game/Graphics/Projectiles/missile.png", new Sound("./src/game/Sound/SoundEffects/shot.wav")), "./src/game/Graphics/Enemies/red_enemy4.png");
 		this.shooting = true;
+		this.weapon.setExplosive(true);
 		Random rng = new Random();
 		this.yPos = 10 + rng.nextInt(GamePanel.HEIGHT - this.height - 100);
 		this.xPos = 10 + rng.nextInt(GamePanel.WIDTH - this.width - 20);

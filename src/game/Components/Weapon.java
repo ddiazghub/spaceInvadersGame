@@ -10,6 +10,7 @@ package game.Components;
  * @author david
  */
 
+import game.Core.GamePanel;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -32,7 +33,8 @@ public class Weapon {
 	private ArrayList<Animation> finishedExplosions = new ArrayList<>();
 	private Sound soundEffect;
 	private String type = "base";
-	private boolean explosive;
+	private boolean explosive = false;
+	private boolean star = false;
 
 	
 	public Weapon(int x, int y, int damage, double projectileSpeed, int fireRate, String shootingDirection, String imagePath, Sound soundEffect) {
@@ -172,6 +174,10 @@ public class Weapon {
 		this.timer.newDelay(1000 / (this.fireRate * this.fireRateMultiplier));
 	}
 	
+	public void star(Boolean star) {
+		this.star = star;
+	}
+	
 	public void resetMultishot() {
 		this.multishot = 1;
 	}
@@ -200,21 +206,33 @@ public class Weapon {
 			double rand = random.nextFloat();
 			if (rand > 1 - this.chanceToShoot) {
 				this.soundEffect.play(false);
-				if (multishot % 2 != 0) {
-					this.projectileStream.add(new Projectile(this.getX(), this.getY(), this.projectile.getDamage(), this.projectile.getSpeedY(), this.projectile.getDirection(), this.projectile.getSprite()));
-					for (int i = 0; i < (multishot - 1) / 2; i++) {
-						this.projectileStream.add(new Projectile(this.getX() - this.projectile.width * (i + 1), this.getY(), this.projectile.getDamage(), this.projectile.getSpeedY(), this.projectile.getDirection(), this.projectile.getSprite()));
-						this.projectileStream.add(new Projectile(this.getX() + this.projectile.width * (i + 1), this.getY(), this.projectile.getDamage(), this.projectile.getSpeedY(), this.projectile.getDirection(), this.projectile.getSprite()));
-					}
+				if (star) {
+					this.projectileStream.add(new Projectile(this.getX(), this.getY(), this.projectile.getDamage(), this.projectile.getSpeedY(), this.projectile.getSpeedY(), this.projectile.getDirection(), this.projectile.getSprite()));
+					this.projectileStream.add(new Projectile(this.getX(), this.getY(), this.projectile.getDamage(), -this.projectile.getSpeedY(), this.projectile.getSpeedY(), this.projectile.getDirection(), this.projectile.getSprite()));
+					this.projectileStream.add(new Projectile(this.getX(), this.getY(), this.projectile.getDamage(), this.projectile.getSpeedY() / 2, this.projectile.getSpeedY(), this.projectile.getDirection(), this.projectile.getSprite()));
+					this.projectileStream.add(new Projectile(this.getX(), this.getY(), this.projectile.getDamage(), -this.projectile.getSpeedY() / 2, this.projectile.getSpeedY(), this.projectile.getDirection(), this.projectile.getSprite()));
+					this.projectileStream.add(new Projectile(this.getX(), this.getY(), this.projectile.getDamage(), 0, this.projectile.getSpeedY(), this.projectile.getDirection(), this.projectile.getSprite()));
 				} else {
-					for (int i = 0; i < multishot / 2; i++) {
-						this.projectileStream.add(new Projectile(this.getX() - this.projectile.width * (i + 1), this.getY(), this.projectile.getDamage(), this.projectile.getSpeedY(), this.projectile.getDirection(), this.projectile.getSprite()));
-						this.projectileStream.add(new Projectile(this.getX() + this.projectile.width * (i + 1), this.getY(), this.projectile.getDamage(), this.projectile.getSpeedY(), this.projectile.getDirection(), this.projectile.getSprite()));
+					if (multishot % 2 != 0) {
+						this.projectileStream.add(new Projectile(this.getX(), this.getY(), this.projectile.getDamage(), this.projectile.getSpeedY(), this.projectile.getDirection(), this.projectile.getSprite()));
+						for (int i = 0; i < (multishot - 1) / 2; i++) {
+							this.projectileStream.add(new Projectile(this.getX() - this.projectile.width * (i + 1), this.getY(), this.projectile.getDamage(), this.projectile.getSpeedY(), this.projectile.getDirection(), this.projectile.getSprite()));
+							this.projectileStream.add(new Projectile(this.getX() + this.projectile.width * (i + 1), this.getY(), this.projectile.getDamage(), this.projectile.getSpeedY(), this.projectile.getDirection(), this.projectile.getSprite()));
+						}
+					} else {
+						for (int i = 0; i < multishot / 2; i++) {
+							this.projectileStream.add(new Projectile(this.getX() - this.projectile.width * (i + 1), this.getY(), this.projectile.getDamage(), this.projectile.getSpeedY(), this.projectile.getDirection(), this.projectile.getSprite()));
+							this.projectileStream.add(new Projectile(this.getX() + this.projectile.width * (i + 1), this.getY(), this.projectile.getDamage(), this.projectile.getSpeedY(), this.projectile.getDirection(), this.projectile.getSprite()));
+						}
 					}
 				}
 			}
 			this.timer.reset();
 		}
+	}
+	
+	public ArrayList<Animation> explosions() {
+		return this.explosions;
 	}
 	
 	public double getDamageMultiplier() {
@@ -264,9 +282,20 @@ public class Weapon {
 	public void collision(CharacterEntity entity) {
 		if (entity.isVulnerable()) {
 			for (int i = 0; i < this.projectileStream.size(); i++) {
-				if (entity.getBounds().intersects(this.projectileStream.get(i).getBounds())) {
-					entity.hurt((int) Math.round(this.projectileStream.get(i).getDamage() * this.damageMultiplier));
-					this.deleteProjectile(i);
+				Projectile projectile = this.projectileStream.get(i);
+				if (explosive) {
+					if (projectile.getY() > GamePanel.HEIGHT - projectile.height) {
+						Rectangle aoe = new Rectangle(projectile.getX() - 100, projectile.getY() - 115, 200, 200);
+						Animation explosion = new Animation(projectile.getX() - 110, projectile.getY() - 140, 220, 220, "./src/game/Graphics/explosion.gif", 1000, new Sound("./src/game/Sound/SoundEffects/explosion.wav"));
+						this.explosions.add(explosion);
+						if (entity.getBounds().intersects(aoe)) entity.hurt((int) Math.round(this.projectileStream.get(i).getDamage() * this.damageMultiplier));
+						this.deleteProjectile(i);
+					}
+				} else {
+					if (entity.getBounds().intersects(projectile.getBounds())) {
+						entity.hurt((int) Math.round(projectile.getDamage() * this.damageMultiplier));
+						this.deleteProjectile(i);
+					}
 				}
 			}
 		}
@@ -289,20 +318,22 @@ public class Weapon {
 							Rectangle aoe;
 							Animation explosion;
 							if (type.equals("blue_plasma")) {
-								aoe = new Rectangle(projectile.getX() - 50 / 2, projectile.getY() - 50 / 2, 100, 100);
+								aoe = new Rectangle(projectile.getX() - 50, projectile.getY() - 50, 100, 100);
 								explosion = new Animation(projectile.getX() - 80, projectile.getY() - 80, 160, 160, "./src/game/Graphics/explosion.gif", 1000, new Sound("./src/game/Sound/SoundEffects/explosion.wav"));
 							}
 							else {
-								aoe = new Rectangle(projectile.getX() - 100, projectile.getY() - 100 / 2, 200, 200);
+								aoe = new Rectangle(projectile.getX() - 100, projectile.getY() - 100, 200, 200);
 								explosion = new Animation(projectile.getX() - 110, projectile.getY() - 110, 220, 220, "./src/game/Graphics/explosion.gif", 1000, new Sound("./src/game/Sound/SoundEffects/explosion.wav"));
 							}
 							this.explosions.add(explosion);
 							for (CharacterEntity eachEntity: entities) {
 								if (eachEntity.getBounds().intersects(aoe)) eachEntity.hurt((int) Math.round(this.projectileStream.get(i).getDamage() * this.damageMultiplier));
-							} 
+							}
+							this.deleteProjectile(i);
+						} else {
+							entity.hurt((int) Math.round(this.projectileStream.get(i).getDamage() * this.damageMultiplier));
+							this.deleteProjectile(i);
 						}
-						entity.hurt((int) Math.round(this.projectileStream.get(i).getDamage() * this.damageMultiplier));
-						this.deleteProjectile(i);
 					}
 				}
 			}

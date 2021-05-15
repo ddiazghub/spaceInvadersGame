@@ -9,8 +9,8 @@ package game.Components;
  *
  * @author david
  */
-import com.sun.glass.events.KeyEvent;
 import game.Core.GamePanel;
+import java.awt.event.KeyEvent;
 
 public class Player extends Character {
 

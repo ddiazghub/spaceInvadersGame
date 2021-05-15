@@ -5,18 +5,8 @@
  */
 package game.GameStateLogic;
 
-import game.Components.CharacterEntity;
-import game.Components.Collectable;
-import game.Components.DifficultyScaling;
-import game.Components.Enemies.Red1;
-import game.Components.Enemies.YellowBoss2;
-import game.Components.Enemies.RedBoss;
-import game.Components.Enemies.YellowBoss;
-import game.Components.GameTimer;
-import game.Components.Player;
-import game.Components.ScoreCounter;
-import game.Components.Sound;
-import game.Components.Weapon;
+import game.Components.Enemies.*;
+import game.Components.*;
 import game.Core.GamePanel;
 import java.awt.Color;
 import java.awt.Font;
@@ -39,6 +29,7 @@ public class SurvivalModeState extends GameState{
 	private Player player;
 	private ArrayList<CharacterEntity> enemies;
 	private ArrayList<CharacterEntity> deadEnemies;
+	private HashMap<String, Integer> enemySpawnRates;
 	private HashMap<String, Sound> sounds;
 	private ScoreCounter score;
 	private GameTimer startTimer;
@@ -101,6 +92,17 @@ public class SurvivalModeState extends GameState{
 		this.collectablesSpawnRates.put("missile", 8);
 		this.collectablesSpawnRates.put("blue_plasma", 5);
 		
+		this.enemySpawnRates = new HashMap<>();
+		this.enemySpawnRates.put("Red1", 30);
+		this.enemySpawnRates.put("Blue1", 0);
+		this.enemySpawnRates.put("Yellow1", 10);
+		this.enemySpawnRates.put("Red2", 20);
+		this.enemySpawnRates.put("Brown1", 0);
+		this.enemySpawnRates.put("Yellow2", 0);
+		this.enemySpawnRates.put("Blue2", 0);
+		this.enemySpawnRates.put("Red3", 0);
+		this.enemySpawnRates.put("Brown3", 0);
+		this.enemySpawnRates.put("Blue3", 40);
 	}
 
 	public void tick() {
@@ -140,7 +142,7 @@ public class SurvivalModeState extends GameState{
 				
 				this.player.getWeapon().clear();
 				for (CharacterEntity enemy: enemies) {
-					enemy.getWeapon().clear();
+					if (enemy.getWeapon() != null) enemy.getWeapon().clear();
 				}
 			}
 		}
@@ -150,7 +152,7 @@ public class SurvivalModeState extends GameState{
 		this.player.getWeapon().collision(enemies);
 		for (CharacterEntity enemy: enemies) {
 			enemy.tick();
-			enemy.getWeapon().collision(player);
+			if (enemy.getWeapon() != null) enemy.getWeapon().collision(player);
 			enemy.collision(player);
 			if (enemy.isDead()) {
 				this.score.addScore(enemy.getScore());
@@ -165,8 +167,13 @@ public class SurvivalModeState extends GameState{
 			double enemiesPerSecond = 1.5 * this.enemiesToSpawn / 60;
 			while (enemiesPerSecond >= 0) {
 				if (new Random().nextDouble() <= enemiesPerSecond) {
-					enemies.add(new Red1());
-					spawnedEnemies++;
+					try {
+						Class enemyClass = Class.forName("game.Components.Enemies." + pickRandomWithRates(enemySpawnRates));
+						enemies.add((CharacterEntity) enemyClass.newInstance());
+						spawnedEnemies++;
+					} catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+						System.out.println(e.getMessage());
+					}
 				}
 				enemiesPerSecond--;
 			}
@@ -187,7 +194,7 @@ public class SurvivalModeState extends GameState{
 		this.collectablesToRemove.clear();
 		
 		if (this.collectableSpawnTimer.delayFinished()) {
-			if (new Random().nextFloat() >= 0.30) this.collectables.add(new Collectable(pickRandomWithRates(this.collectablesSpawnRates)));
+			if (new Random().nextFloat() >= 0.6) this.collectables.add(new Collectable(pickRandomWithRates(this.collectablesSpawnRates)));
 			this.collectableSpawnTimer.reset();
 		}
 		

@@ -75,11 +75,7 @@ public abstract class Character extends Entity implements CharacterEntity {
 				this.weapon.render(g);
 			}
 		}
-		if (this.spawn != null) {
-			if (!this.spawn.ended() ) {
-				spawn.render(g);
-			}
-		}
+		if (this.spawn != null && !this.spawn.ended()) spawn.render(g);
 	}
 
 	public int getHp() {

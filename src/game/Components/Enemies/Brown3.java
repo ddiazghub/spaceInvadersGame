@@ -16,18 +16,15 @@ import java.util.Random;
  *
  * @author david
  */
-public class Blue1 extends Enemy {
+public class Brown3 extends Enemy {
 	
-	private int xDir;
-	
-	public Blue1() {
-		super(-1000, -1000, 30, 1, 4 + new Random().nextInt(3), 100, new Weapon(-1000, 1000, 7, 4, 1, 0.4, "down", "./src/game/Graphics/Projectiles/blue_laser.png", new Sound("./src/game/Sound/SoundEffects/laser.wav")), "./src/game/Graphics/Enemies/blue_enemy1.png");
+	public Brown3() {
+		super(-1000, -1000, 30, 1, 4 + new Random().nextInt(3), 100, new Weapon(-1000, 1000, 7, 4, 1, 0.4, "down", "./src/game/Graphics/Projectiles/green_orb.png", new Sound("./src/game/Sound/SoundEffects/laser.wav")), "./src/game/Graphics/Enemies/brown_enemy3.png");
 		this.shooting = true;
+		this.weapon.star(true);
 		Random rng = new Random();
 		this.yPos = 10 + rng.nextInt(GamePanel.HEIGHT - this.height - 100);
 		this.xPos = 10 + rng.nextInt(GamePanel.WIDTH - this.width - 20);
-		if (this.xPos - this.width < GamePanel.WIDTH) xDir = 1;
-		else xDir = -1; 
 		this.spawn.stop();
 		this.spawn = null;
 		this.spawn = new Animation(xPos - width / 2, yPos - height / 2, 2 * width, 2 * height, "./src/game/Graphics/portal.gif", 500, new Sound("./src/game/Sound/SoundEffects/teleportation.wav"));
@@ -52,10 +49,7 @@ public class Blue1 extends Enemy {
 	}
 	
 	public void move() {
-		if (this.getX() >= GamePanel.WIDTH - this.getWidth() || this.getX() <= 0) {
-			this.xDir *= -1;
-		}
-		this.xPos += this.xSpeed * this.xDir * this.speedMultiplier;
+		
 	}
 	
 	public void stop(long duration) {

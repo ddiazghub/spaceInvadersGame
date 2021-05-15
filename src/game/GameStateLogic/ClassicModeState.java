@@ -24,6 +24,7 @@ import java.awt.event.KeyEvent;
 import game.Components.ScoreCounter;
 import game.Components.Sound;
 import java.util.HashMap;
+import java.util.Random;
 
 /**
  *
@@ -63,7 +64,7 @@ public class ClassicModeState extends GameState {
 		this.startTimer.newDelay(3000);
 		this.sounds = new HashMap<>();
 		this.sounds.put("pause", new Sound("./src/game/Sound/SoundEffects/menu_back.wav"));
-		this.sounds.put("powerup", new Sound("./src/game/Sound/SoundEffects/powerup.wav"));
+		this.sounds.put("collectable", new Sound("./src/game/Sound/SoundEffects/collectable.wav"));
 		this.music = new Sound("./src/game/Sound/Music/game.wav");
 		this.music.play(true);
 		this.paused = false;
@@ -143,6 +144,25 @@ public class ClassicModeState extends GameState {
 		if (this.invaders.getInvaders().isEmpty()) {
 			newLevel();
 		}
+		
+		for (Collectable collectable: this.collectables) {
+			collectable.tick();
+			if (collectable.collision(player) || collectable.getY() > GamePanel.WIDTH) {
+				this.collectablesToRemove.add(collectable);
+			}
+		}
+		
+		for (Collectable collectable: this.collectablesToRemove) {
+			this.collectables.remove(collectable);
+		}
+		
+		this.collectablesToRemove.clear();
+		
+		if (this.collectableSpawnTimer.delayFinished()) {
+			if (new Random().nextFloat() >= 0.7) this.collectables.add(new Collectable(pickRandomWithRates(this.collectablesSpawnRates)));
+			this.collectableSpawnTimer.reset();
+		}
+		
 	}
 
 	public void render(Graphics g) {
@@ -152,6 +172,7 @@ public class ClassicModeState extends GameState {
 
 		this.player.render(g);
 		this.invaders.render(g);
+		for (Collectable collectable: this.collectables) collectable.render(g);
 		
 		for (int i = 0; i < player.getLives(); i++) {
 			g.drawImage(life, 90 + i * 30, 13, null);
@@ -180,6 +201,14 @@ public class ClassicModeState extends GameState {
 		this.invaders.setSpeedMultiplier(multiplier);
 		this.clearProjectiles();
 		this.stopAllEntities(2000);
+	}
+	
+	public String pickRandomWithRates(HashMap<String, Integer> data) {
+		ArrayList<String> shuffler = new ArrayList<>();
+		for (String element : data.keySet()) {
+			for (int i = 0; i < data.get(element); i++) shuffler.add(element);
+		}
+		return shuffler.get(new Random().nextInt(shuffler.size()));
 	}
 	
 	public void clearProjectiles() {

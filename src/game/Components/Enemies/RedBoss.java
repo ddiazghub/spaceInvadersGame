@@ -16,7 +16,6 @@ import game.Core.GamePanel;
  */
 public class RedBoss extends Enemy {
 	
-	private boolean hitEdge;
 	private int xDir;
 	
 	public RedBoss(int x, int y) {

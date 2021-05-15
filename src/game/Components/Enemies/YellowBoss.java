@@ -26,12 +26,10 @@ public class YellowBoss extends Enemy {
 	
 	private ArrayList<CharacterEntity> helpers;
 	private ArrayList<CharacterEntity> deadHelpers;
-	private Player player;
 	private boolean spawnedHelpers = false;
 	private boolean teleported = false;
 	private GameTimer teleportTimer;
 	private Animation portal2;
-	private int xDir;
 	
 	
 	public YellowBoss(Player player) {
@@ -101,7 +99,7 @@ public class YellowBoss extends Enemy {
 			}
 			if (hasWeapon) this.weapon.render(g);
 		}
-		if (!this.spawn.ended()) spawn.render(g);
+		if (this.spawn != null && !this.spawn.ended()) spawn.render(g);
 		if (this.portal2 != null && !this.portal2.ended()) portal2.render(g);
 	}
 	
@@ -132,15 +130,12 @@ public class YellowBoss extends Enemy {
 	}
 	
 	public void move() {
-		if (this.getX() >= GamePanel.WIDTH - this.getWidth() || this.getX() <= 0) {
-			this.xDir *= -1;
-		}
 		if (this.teleportTimer.delayFinished()) {
 			resetPortal2();
 			Random rng = new Random();
 			Rectangle initialBounds = new Rectangle(xPos - 50, yPos - 25, width + 100, height + 50);
 			while (new Rectangle(xPos, yPos, width, height).intersects(initialBounds)) {
-				this.yPos = 25 + rng.nextInt(GamePanel.HEIGHT - this.height - 200);
+				this.yPos = 10 + rng.nextInt(GamePanel.HEIGHT - this.height - 100);
 				this.xPos = 50 + rng.nextInt(GamePanel.WIDTH - this.width - 100);
 			}
 			this.teleportTimer.reset();

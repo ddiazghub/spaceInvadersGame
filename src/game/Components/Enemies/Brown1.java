@@ -5,7 +5,6 @@
  */
 package game.Components.Enemies;
 
-import game.Components.Animation;
 import game.Components.Enemy;
 import game.Components.Sound;
 import game.Components.Weapon;
@@ -16,21 +15,26 @@ import java.util.Random;
  *
  * @author david
  */
-public class Blue1 extends Enemy {
+public class Brown1 extends Enemy {
 	
 	private int xDir;
 	
-	public Blue1() {
-		super(-1000, -1000, 30, 1, 4 + new Random().nextInt(3), 100, new Weapon(-1000, 1000, 7, 4, 1, 0.4, "down", "./src/game/Graphics/Projectiles/blue_laser.png", new Sound("./src/game/Sound/SoundEffects/laser.wav")), "./src/game/Graphics/Enemies/blue_enemy1.png");
+	public Brown1() {
+		super(100, -500, 30, 2, 0, 100, 
+				new Weapon(-1000, 1000, 7, 4, 1, 0.4, "down", "./src/game/Graphics/Projectiles/green_plasma.png", 
+			    new Sound("./src/game/Sound/SoundEffects/laser.wav")), "./src/game/Graphics/Enemies/brown_enemy1.png");
 		this.shooting = true;
 		Random rng = new Random();
+		if (rng.nextFloat() >= 0.5) {
+			this.xPos = -this.width - rng.nextInt(200);
+			this.xDir = 1;
+		} else {
+			this.xPos = GamePanel.WIDTH + rng.nextInt(200);
+			this.xDir = -1;
+		}
 		this.yPos = 10 + rng.nextInt(GamePanel.HEIGHT - this.height - 100);
-		this.xPos = 10 + rng.nextInt(GamePanel.WIDTH - this.width - 20);
-		if (this.xPos - this.width < GamePanel.WIDTH) xDir = 1;
-		else xDir = -1; 
 		this.spawn.stop();
 		this.spawn = null;
-		this.spawn = new Animation(xPos - width / 2, yPos - height / 2, 2 * width, 2 * height, "./src/game/Graphics/portal.gif", 500, new Sound("./src/game/Sound/SoundEffects/teleportation.wav"));
 	}
 	
 	public void tick() {
@@ -52,8 +56,17 @@ public class Blue1 extends Enemy {
 	}
 	
 	public void move() {
-		if (this.getX() >= GamePanel.WIDTH - this.getWidth() || this.getX() <= 0) {
-			this.xDir *= -1;
+		if (this.getX() > GamePanel.WIDTH || this.getX() < -this.width) {
+			Random rng = new Random();
+			this.xSpeed = 1 + rng.nextInt(2);
+			if (rng.nextFloat() >= 0.5) {
+				this.xPos = -this.width - rng.nextInt(200);
+				this.xDir = 1;
+			} else {
+				this.xPos = GamePanel.WIDTH + rng.nextInt(200);
+				this.xDir = -1;
+			}
+			this.yPos = 10 + rng.nextInt(GamePanel.HEIGHT - this.height - 100);
 		}
 		this.xPos += this.xSpeed * this.xDir * this.speedMultiplier;
 	}

@@ -22,7 +22,7 @@ import java.util.HashMap;
 public class GMSelectState extends GameState {
 
 	private HashMap<String, Sound> sounds;
-	private String[] options = {"Clásico", "No se", "Multijugador"};
+	private String[] options = {"Clásico", "Supervivencia", "Multijugador"};
 	private int currentSelection = 0;
 
 	public GMSelectState(GameStateManager stateManager, Sound music) {

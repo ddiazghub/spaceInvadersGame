@@ -36,6 +36,13 @@ public class Projectile extends Entity {
 		this.ySpeed = projectileSpeed;
 		this.direction = direction;
 	}
+	public Projectile(int x, int y, int damage, double xSpeed, double ySpeed, String direction, Image sprite) {
+		super(x, y, sprite);
+		this.damage = damage;
+		this.xSpeed = xSpeed;
+		this.ySpeed = ySpeed;
+		this.direction = direction;
+	}
 	public int getDamage() {
 		return this.damage;
 	}
@@ -53,6 +60,7 @@ public class Projectile extends Entity {
 			case "down":
 				this.yPos += this.ySpeed * this.speedMultiplier;
 		}
+		this.xPos += this.xSpeed;
 	}
 	public void tick() {
 		if (this.stopped) return;
