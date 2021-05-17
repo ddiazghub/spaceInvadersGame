@@ -66,6 +66,9 @@ public class Projectile extends Entity {
 		if (this.stopped) return;
 		this.travel();
 	}
+	public void setSpeedY(int speedY) {
+		this.ySpeed = speedY;
+	}
 	public void render(Graphics g) {
 		if (this.visible) {
 			if (this.direction.equals("up")) {

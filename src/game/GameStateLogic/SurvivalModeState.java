@@ -30,6 +30,7 @@ public class SurvivalModeState extends GameState{
 	private ArrayList<CharacterEntity> enemies;
 	private ArrayList<CharacterEntity> deadEnemies;
 	private HashMap<String, Integer> enemySpawnRates;
+	private HashMap<String, Integer> bossSpawnRates;
 	private HashMap<String, Sound> sounds;
 	private ScoreCounter score;
 	private GameTimer startTimer;
@@ -46,6 +47,8 @@ public class SurvivalModeState extends GameState{
 	private boolean boss;
 	private boolean paused;
 	private Sound bossMusic;
+	private double enemyHpMultiplier = 1;
+	private double enemyDamageMultiplier = 1;
 
 	public SurvivalModeState(GameStateManager stateManager) {
 		super(stateManager);
@@ -70,9 +73,9 @@ public class SurvivalModeState extends GameState{
 		this.music = new Sound("./src/game/Sound/Music/game.wav");
 		this.music.play(true);
 		this.bossMusic = new Sound("./src/game/Sound/Music/boss.wav");
-		this.enemiesToSpawn = 40;
+		this.enemiesToSpawn = 80;
 		this.spawnedEnemies = 0;
-		this.maxNumberOfEnemies = 15;
+		this.maxNumberOfEnemies = 8;
 		this.sounds = new HashMap<>();
 		this.sounds.put("pause", new Sound("./src/game/Sound/SoundEffects/menu_back.wav"));
 		this.boss = false;
@@ -93,16 +96,22 @@ public class SurvivalModeState extends GameState{
 		this.collectablesSpawnRates.put("blue_plasma", 5);
 		
 		this.enemySpawnRates = new HashMap<>();
-		this.enemySpawnRates.put("Red1", 30);
-		this.enemySpawnRates.put("Blue1", 0);
-		this.enemySpawnRates.put("Yellow1", 10);
-		this.enemySpawnRates.put("Red2", 20);
-		this.enemySpawnRates.put("Brown1", 0);
-		this.enemySpawnRates.put("Yellow2", 0);
-		this.enemySpawnRates.put("Blue2", 0);
-		this.enemySpawnRates.put("Red3", 0);
-		this.enemySpawnRates.put("Brown3", 0);
-		this.enemySpawnRates.put("Blue3", 40);
+		this.enemySpawnRates.put("Red1", 14);
+		this.enemySpawnRates.put("Blue1", 14);
+		this.enemySpawnRates.put("Yellow1", 14);
+		this.enemySpawnRates.put("Red2", 14);
+		this.enemySpawnRates.put("Brown1", 14);
+		this.enemySpawnRates.put("Yellow2", 10);
+		this.enemySpawnRates.put("Blue2", 8);
+		this.enemySpawnRates.put("Red3", 4);
+		this.enemySpawnRates.put("Brown3", 4);
+		this.enemySpawnRates.put("Blue3", 4);
+		
+		this.bossSpawnRates = new HashMap<>();
+		this.bossSpawnRates.put("RedBoss", 25);
+		this.bossSpawnRates.put("BlueBoss", 25);
+		this.bossSpawnRates.put("YellowBoss", 25);
+		this.bossSpawnRates.put("BrownBoss", 25);
 	}
 
 	public void tick() {
@@ -169,7 +178,10 @@ public class SurvivalModeState extends GameState{
 				if (new Random().nextDouble() <= enemiesPerSecond) {
 					try {
 						Class enemyClass = Class.forName("game.Components.Enemies." + pickRandomWithRates(enemySpawnRates));
-						enemies.add((CharacterEntity) enemyClass.newInstance());
+						CharacterEntity enemy = (CharacterEntity) enemyClass.newInstance();
+						enemy.maxHpMultiplier(enemyHpMultiplier);
+						enemy.damageMultiplier(enemyDamageMultiplier);
+						enemies.add(enemy);
 						spawnedEnemies++;
 					} catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
 						System.out.println(e.getMessage());
@@ -199,7 +211,16 @@ public class SurvivalModeState extends GameState{
 		}
 		
 		if (this.spawnedEnemies >= this.enemiesToSpawn && enemies.size() == 0 && !boss) {
-			enemies.add(new YellowBoss(this.player));
+			try {
+				Class bossClass = Class.forName("game.Components.Enemies." + pickRandomWithRates(bossSpawnRates));
+				CharacterEntity boss = (CharacterEntity) bossClass.newInstance();
+				boss.maxHpMultiplier(enemyHpMultiplier);
+				boss.damageMultiplier(enemyDamageMultiplier);
+				enemies.add(boss);
+				spawnedEnemies++;
+			} catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+				System.out.println(e.getMessage());
+			}
 			this.music.stop();
 			boss = true;
 			this.bossMusic.play(true);
@@ -266,9 +287,11 @@ public class SurvivalModeState extends GameState{
 			this.player.addLife();
 		}
 		this.deadEnemies.clear();
-		this.enemiesToSpawn += 20;
+		this.enemiesToSpawn += 15;
 		this.spawnedEnemies = 0;
-		this.maxNumberOfEnemies += 5;
+		this.maxNumberOfEnemies += 4;
+		this.enemyHpMultiplier *= 1.15;
+		this.enemyDamageMultiplier *= 1.15;
 		/*
 		this.enemies = new InvaderGroup(10, 50, (int) Math.floor(6 + multiplier), (int) Math.floor(9 + multiplier));
 		this.invaders.setSpeedMultiplier(multiplier);

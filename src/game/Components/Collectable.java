@@ -135,7 +135,7 @@ public class Collectable {
 					if (playerWeapon.getMultishot() < 5) playerWeapon.addShot();
 				} else {
 					playerWeapon.resetMultishot();
-					playerWeapon.newProjectile(-1000, -1000, 25, 10, "up", "./src/game/Graphics/Projectiles/red_laser.png");
+					playerWeapon.newProjectile(-1000, -1000, 30, 10, "up", "./src/game/Graphics/Projectiles/red_laser.png");
 					playerWeapon.setFireRate(2);
 					playerWeapon.setSoundEffect(new Sound("./src/game/Sound/SoundEffects/laser.wav"));
 					playerWeapon.addShot();
@@ -149,7 +149,7 @@ public class Collectable {
 					if (playerWeapon.getMultishot() < 4) playerWeapon.addShot();
 				} else {
 					playerWeapon.resetMultishot();
-					playerWeapon.newProjectile(-1000, -1000, 10, 10, "up", "./src/game/Graphics/Projectiles/blue_laser.png");
+					playerWeapon.newProjectile(-1000, -1000, 12, 10, "up", "./src/game/Graphics/Projectiles/blue_laser.png");
 					playerWeapon.setFireRate(7);
 					playerWeapon.setSoundEffect(new Sound("./src/game/Sound/SoundEffects/laser.wav"));
 					playerWeapon.setType("blue_laser");
@@ -162,7 +162,7 @@ public class Collectable {
 					if (playerWeapon.getMultishot() < 3) playerWeapon.addShot();
 				} else {
 					playerWeapon.resetMultishot();
-					playerWeapon.newProjectile(-1000, -1000, 45, 10, "up", "./src/game/Graphics/Projectiles/missile.png");
+					playerWeapon.newProjectile(-1000, -1000, 50, 10, "up", "./src/game/Graphics/Projectiles/missile.png");
 					playerWeapon.setFireRate(1);
 					playerWeapon.setSoundEffect(new Sound("./src/game/Sound/SoundEffects/shot.wav"));
 					playerWeapon.setExplosive(true);

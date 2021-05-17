@@ -9,75 +9,55 @@ import game.Components.Animation;
 import game.Components.CharacterEntity;
 import game.Components.Enemy;
 import game.Components.GameTimer;
-import game.Components.Player;
 import game.Components.Sound;
 import game.Components.Weapon;
 import game.Core.GamePanel;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.Random;
-import java.util.ArrayList;
 
 /**
  *
  * @author david
  */
-public class YellowBoss extends Enemy {
-	
-	private ArrayList<CharacterEntity> helpers;
-	private ArrayList<CharacterEntity> deadHelpers;
-	private boolean spawnedHelpers = false;
-	private boolean teleported = false;
+public class BrownBoss extends Enemy {
+	private int xDir;
+	private int yDir;
+	private GameTimer speedChangeTimer;
+	private GameTimer shootingTimer;
 	private GameTimer teleportTimer;
 	private Animation portal2;
+	private int minimunMovementSpeed = 1;
+	private int speedMargin = 4;
 	
-	
-	public YellowBoss() {
-		super(250, 200, 1000, 1, 4 + new Random().nextInt(3), 100, new Weapon(-1000, 1000, 35, 6, 3, 0.33, "down", "./src/game/Graphics/Projectiles/missile.png", new Sound("./src/game/Sound/SoundEffects/shot.wav")), "./src/game/Graphics/Enemies/yellow_boss.png");
+	public BrownBoss() {
+		super(-1000, -1000, 300, 1 + new Random().nextInt(4), 1 + new Random().nextInt(4), 100, new Weapon(-1000, 1000, 4, 4, 5, 1, "down", "./src/game/Graphics/Projectiles/green_orb.png", new Sound("./src/game/Sound/SoundEffects/laser.wav")), "./src/game/Graphics/Enemies/brown_boss.png");
 		this.shooting = true;
-		this.weapon.setExplosive(true);
-		this.helpers = new ArrayList<>();
-		this.deadHelpers = new ArrayList<>();
+		Random rng = new Random();
+		this.yPos = 10 + rng.nextInt(GamePanel.HEIGHT - this.height - 100);
+		this.xPos = 10 + rng.nextInt(GamePanel.WIDTH - this.width - 20);
+		if (this.xPos < GamePanel.WIDTH / 2 - this.width / 2) xDir = 1;
+		else xDir = -1; 
+		
+		if (this.yPos < GamePanel.HEIGHT / 2 - 50  - this.height / 2) yDir = 1;
+		else yDir = 1;
+		this.weapon.star(true);
+		this.speedChangeTimer = new GameTimer();
+		this.speedChangeTimer.newDelay(1500);
 		this.teleportTimer = new GameTimer();
-		this.teleportTimer.newDelay(2000);
+		this.teleportTimer.newDelay(4000);
+		this.shootingTimer = new GameTimer();
+		this.shootingTimer.newDelay(3000);
+		this.spawn.stop();
+		this.spawn = null;
+		this.spawn = new Animation(xPos - width / 2, yPos - height / 2, 2 * width, 2 * height, "./src/game/Graphics/portal.gif", 500, new Sound("./src/game/Sound/SoundEffects/teleportation.wav"));
 	}
 	
 	public void tick() {
-		
-		if (this.helpers.size() > 0) {
-			this.setVisible(false);
-			this.invulnerable(10000000);
-			for (CharacterEntity helper: helpers) {
-				helper.tick();
-				if (helper.isDead()) deadHelpers.add(helper);
-			}
-			for (CharacterEntity helper: deadHelpers) helpers.remove(helper);
-			return;
-		} else {
-			this.setVisible(true);
-			this.setVulnerable(true);
-		}
-		
-		if (this.spawnedHelpers && !this.teleported) {
-			resetPortal();
-			this.teleported = true;
-		}
 		if (this.hasWeapon) this.weapon.tick();
 		
 		if (this.timer.delayFinished() && this.stopped) resume();
 		if (this.stopped) return;
-		
-		if (this.hp < this.maxHp * 1 / 2 && !this.spawnedHelpers) {
-			this.helpers.add(new YellowBoss2());
-			this.helpers.add(new YellowBoss2());
-			this.helpers.add(new YellowBoss2());
-			for (CharacterEntity helper: helpers) {
-				helper.damageMultiplier(this.weapon.getDamageMultiplier());
-			}
-			this.spawnedHelpers = true;
-			this.teleportTimer.newDelay(1000);
-			resetPortal();
-		}
 		
 		this.move();
 		if (this.hasWeapon) {
@@ -85,12 +65,26 @@ public class YellowBoss extends Enemy {
 			this.weapon.setY(this.yPos + this.height);
 			if (this.shooting) shoot();
 		}
+		
+		if (this.hp < this.maxHp) {
+			this.minimunMovementSpeed = 3;
+			this.speedMargin = 5;
+		}
+		Random rng = new Random();
+		
+		if (this.shootingTimer.delayFinished() && !this.shooting) {
+			this.shooting = true;
+			this.shootingTimer.newDelay(rng.nextInt(3000));
+		}
+		
+		if (this.shootingTimer.delayFinished() && this.shooting) {
+			this.shooting = false;
+			this.shootingTimer.newDelay(rng.nextInt(4000));
+		}
 	}
 	
 	@Override
 	public void render(Graphics g) {
-		
-		for (CharacterEntity helper: helpers) helper.render(g);
 
 		if (this.visible) {
 			if (!this.vulnerable) {
@@ -107,18 +101,14 @@ public class YellowBoss extends Enemy {
 		if (this.portal2 != null && !this.portal2.ended()) portal2.render(g);
 	}
 	
-	@Override
-	public void collision(CharacterEntity entity) {
-		for (CharacterEntity helper: helpers) {
-			helper.collision(entity);
-		}
-		entity.getWeapon().collision(helpers);
-		if (entity.getBounds().intersects(this.getBounds())) {
-			entity.hurt(this.weapon.getDamage() * 100000);
-		}
-		if (entity.isDead()) {
-			this.weapon.newExplosion(entity);
-		}
+	public void changeMovement() {
+		Random rng = new Random();
+		if (rng.nextFloat() > 0.5) xDir *= -1;
+		
+		if (rng.nextFloat() > 0.5) yDir *= -1;
+		
+		xSpeed = this.minimunMovementSpeed + rng.nextInt(this.speedMargin);
+		ySpeed = this.minimunMovementSpeed + rng.nextInt(this.speedMargin);
 	}
 	
 	public void tickWeapon() {
@@ -142,9 +132,28 @@ public class YellowBoss extends Enemy {
 				this.yPos = 10 + rng.nextInt(GamePanel.HEIGHT - this.height - 100);
 				this.xPos = 50 + rng.nextInt(GamePanel.WIDTH - this.width - 100);
 			}
-			this.teleportTimer.reset();
+			if (this.hp < this.maxHp / 2) {
+				this.teleportTimer.newDelay(rng.nextInt(4000));
+			} else this.teleportTimer.reset();
 			resetPortal();
 		}
+		
+		if (this.speedChangeTimer.delayFinished()) {
+			changeMovement();
+			if (this.hp < this.maxHp / 2) {
+				this.speedChangeTimer.newDelay(new Random().nextInt(1500));
+			} else {
+				this.speedChangeTimer.reset();
+			}
+		}
+		if (this.getX() >= GamePanel.WIDTH - this.getWidth() || this.getX() <= 0) {
+			this.xDir *= -1;
+		}
+		if (this.getY() >= GamePanel.HEIGHT - this.getHeight() - 100 || this.getY() <= 0) {
+			this.yDir *= -1;
+		}
+		this.xPos += this.xSpeed * this.xDir * this.speedMultiplier;
+		this.yPos += this.ySpeed * this.yDir * this.speedMultiplier;
 	}
 	
 	public void stop(long duration) {

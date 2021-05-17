@@ -88,8 +88,6 @@ public class Blue3 extends Enemy {
 		if (this.getX() > GamePanel.WIDTH || this.getX() < -this.width || this.getY() > GamePanel.HEIGHT) {
 			changeMovement();
 		}
-		System.out.println("x: " + this.xPos);
-		System.out.println("y: " +this.yPos);
 		this.xPos += this.xSpeed * this.xDir * this.speedMultiplier;
 		this.yPos += this.ySpeed * this.speedMultiplier;
 	}

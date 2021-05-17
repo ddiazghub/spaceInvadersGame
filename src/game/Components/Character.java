@@ -98,6 +98,15 @@ public abstract class Character extends Entity implements CharacterEntity {
 		return this.vulnerable;
 	}
 	
+	public void maxHpMultiplier(double multiplier) {
+		this.maxHp *= multiplier;
+		this.hp = this.maxHp;
+	}
+	
+	public void damageMultiplier(double multiplier) {
+		if (this.weapon != null) this.weapon.setDamageMultiplier(multiplier);
+	}
+	
 	public void invulnerable(long duration) {
 		setVulnerable(false);
 		this.invulnerabilityTimer.newDelay(duration);

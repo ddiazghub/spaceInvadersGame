@@ -39,5 +39,7 @@ public interface CharacterEntity {
 	public void collision(CharacterEntity entity);
 	public int getHp();
 	public int getMaxHp();
+	public void maxHpMultiplier(double multiplier);
+	public void damageMultiplier(double multiplier);
 	
 }

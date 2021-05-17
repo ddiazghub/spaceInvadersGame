@@ -38,6 +38,10 @@ public class GameTimer {
 		return System.currentTimeMillis() - this.startTime >= this.duration;
 	}
 	
+	public void setDuration(long duration) {
+		this.duration = duration;
+	}
+	
 	public void pause() {
 		elapsedTime = System.currentTimeMillis() - startTime;
 	}
