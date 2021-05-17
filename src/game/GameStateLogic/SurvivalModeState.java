@@ -73,7 +73,7 @@ public class SurvivalModeState extends GameState{
 		this.music = new Sound("./src/game/Sound/Music/game.wav");
 		this.music.play(true);
 		this.bossMusic = new Sound("./src/game/Sound/Music/boss.wav");
-		this.enemiesToSpawn = 80;
+		this.enemiesToSpawn = 60;
 		this.spawnedEnemies = 0;
 		this.maxNumberOfEnemies = 8;
 		this.sounds = new HashMap<>();
