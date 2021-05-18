@@ -33,7 +33,7 @@ public class YellowBoss extends Enemy {
 	
 	
 	public YellowBoss() {
-		super(250, 200, 1000, 1, 4 + new Random().nextInt(3), 100, new Weapon(-1000, 1000, 35, 6, 3, 0.33, "down", "./src/game/Graphics/Projectiles/missile.png", new Sound("./src/game/Sound/SoundEffects/shot.wav")), "./src/game/Graphics/Enemies/yellow_boss.png");
+		super(250, 200, 800, 1, 4 + new Random().nextInt(3), 100, new Weapon(-1000, 1000, 35, 6, 3, 0.33, "down", "./src/game/Graphics/Projectiles/missile.png", new Sound("./src/game/Sound/SoundEffects/shot.wav")), "./src/game/Graphics/Enemies/yellow_boss.png");
 		this.shooting = true;
 		this.weapon.setExplosive(true);
 		this.helpers = new ArrayList<>();

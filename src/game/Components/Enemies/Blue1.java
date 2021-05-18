@@ -21,7 +21,7 @@ public class Blue1 extends Enemy {
 	private int xDir;
 	
 	public Blue1() {
-		super(-1000, -1000, 30, 1, 4 + new Random().nextInt(3), 100, new Weapon(-1000, 1000, 7, 4, 1, 0.4, "down", "./src/game/Graphics/Projectiles/blue_laser.png", new Sound("./src/game/Sound/SoundEffects/laser.wav")), "./src/game/Graphics/Enemies/blue_enemy1.png");
+		super(-1000, -1000, 50, 1, 4 + new Random().nextInt(3), 100, new Weapon(-1000, 1000, 7, 4, 1, 0.4, "down", "./src/game/Graphics/Projectiles/blue_laser.png", new Sound("./src/game/Sound/SoundEffects/laser.wav")), "./src/game/Graphics/Enemies/blue_enemy1.png");
 		this.shooting = true;
 		Random rng = new Random();
 		this.yPos = 10 + rng.nextInt(GamePanel.HEIGHT - this.height - 100);

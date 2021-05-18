@@ -24,7 +24,7 @@ public class Blue2 extends Enemy {
 	private Animation portal2;
 	
 	public Blue2() {
-		super(-1000, -1000, 30, 1, 4 + new Random().nextInt(3), 100, 
+		super(-1000, -1000, 50, 1, 4 + new Random().nextInt(3), 100, 
 				new Weapon(-1000, 1000, 7, 4, 1, 0.4, 3, "down", "./src/game/Graphics/Projectiles/blue_laser.png", 
 						new Sound("./src/game/Sound/SoundEffects/laser.wav")), "./src/game/Graphics/Enemies/blue_enemy2.png");
 		this.shooting = true;

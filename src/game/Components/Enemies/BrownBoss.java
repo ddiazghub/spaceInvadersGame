@@ -31,7 +31,7 @@ public class BrownBoss extends Enemy {
 	private int speedMargin = 4;
 	
 	public BrownBoss() {
-		super(-1000, -1000, 300, 1 + new Random().nextInt(4), 1 + new Random().nextInt(4), 100, new Weapon(-1000, 1000, 4, 4, 5, 1, "down", "./src/game/Graphics/Projectiles/green_orb.png", new Sound("./src/game/Sound/SoundEffects/laser.wav")), "./src/game/Graphics/Enemies/brown_boss.png");
+		super(-1000, -1000, 800, 1 + new Random().nextInt(4), 1 + new Random().nextInt(4), 100, new Weapon(-1000, 1000, 4, 4, 5, 1, "down", "./src/game/Graphics/Projectiles/green_orb.png", new Sound("./src/game/Sound/SoundEffects/laser.wav")), "./src/game/Graphics/Enemies/brown_boss.png");
 		this.shooting = true;
 		Random rng = new Random();
 		this.yPos = 10 + rng.nextInt(GamePanel.HEIGHT - this.height - 100);

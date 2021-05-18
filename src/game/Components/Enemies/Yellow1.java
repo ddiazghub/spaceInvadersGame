@@ -22,7 +22,7 @@ public class Yellow1 extends Enemy {
 	private int yDir;
 	
 	public Yellow1() {
-		super(-1000, -1000, 30, 1 + new Random().nextInt(2), 1 + new Random().nextInt(2), 100, new Weapon(-1000, 1000, 7, 4, 1, 0.4, "down", "./src/game/Graphics/Projectiles/disparo.png", new Sound("./src/game/Sound/SoundEffects/shot.wav")), "./src/game/Graphics/Enemies/yellow_enemy1.png");
+		super(-1000, -1000, 50, 1 + new Random().nextInt(2), 1 + new Random().nextInt(2), 100, new Weapon(-1000, 1000, 7, 4, 1, 0.4, "down", "./src/game/Graphics/Projectiles/disparo.png", new Sound("./src/game/Sound/SoundEffects/shot.wav")), "./src/game/Graphics/Enemies/yellow_enemy1.png");
 		this.shooting = true;
 		Random rng = new Random();
 		this.yPos = 10 + rng.nextInt(GamePanel.HEIGHT - this.height - 100);

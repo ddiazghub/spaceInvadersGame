@@ -55,7 +55,7 @@ public class SurvivalModeState extends GameState{
 	}
 
 	public void init() {
-		Weapon base = new Weapon(-1000, 1000, 15, 12, 20, "up", "./src/game/Graphics/Projectiles/disparo.png", new Sound("./src/game/Sound/SoundEffects/shot.wav"));
+		Weapon base = new Weapon(-1000, 1000, 10, 12, 3, "up", "./src/game/Graphics/Projectiles/disparo.png", new Sound("./src/game/Sound/SoundEffects/shot.wav"));
 		this.enemies = new ArrayList<>();
 		//this.enemies.add(new YellowBoss(this.player));
 		this.deadEnemies = new ArrayList<>();

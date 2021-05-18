@@ -19,7 +19,7 @@ import java.util.Random;
 public class Brown3 extends Enemy {
 	
 	public Brown3() {
-		super(-1000, -1000, 30, 1, 4 + new Random().nextInt(3), 100, new Weapon(-1000, 1000, 7, 4, 1, 0.4, "down", "./src/game/Graphics/Projectiles/green_orb.png", new Sound("./src/game/Sound/SoundEffects/laser.wav")), "./src/game/Graphics/Enemies/brown_enemy3.png");
+		super(-1000, -1000, 300, 1, 4 + new Random().nextInt(3), 100, new Weapon(-1000, 1000, 13, 4, 1, 0.4, "down", "./src/game/Graphics/Projectiles/green_orb.png", new Sound("./src/game/Sound/SoundEffects/laser.wav")), "./src/game/Graphics/Enemies/brown_enemy3.png");
 		this.shooting = true;
 		this.weapon.star(true);
 		Random rng = new Random();

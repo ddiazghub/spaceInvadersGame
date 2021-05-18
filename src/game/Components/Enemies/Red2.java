@@ -22,7 +22,7 @@ public class Red2 extends Enemy {
 	private int xDir;
 	
 	public Red2() {
-		super(-1000, -1000, 30, 0, 2, 100, null, "./src/game/Graphics/Enemies/red_enemy2.png");
+		super(-1000, -1000, 33, 0, 2, 100, null, "./src/game/Graphics/Enemies/red_enemy2.png");
 		Random rng = new Random();
 		this.yPos = -this.height - new Random().nextInt(200);
 		this.xPos = 10 + rng.nextInt(GamePanel.WIDTH - this.width - 20);

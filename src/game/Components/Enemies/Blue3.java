@@ -21,7 +21,7 @@ public class Blue3 extends Enemy {
 	private GameTimer shootingTimer;
 	
 	public Blue3() {
-		super(100, -500, 30, 2, 0, 100, 
+		super(100, -500, 50, 2, 0, 100, 
 				new Weapon(-1000, 1000, 7, 6, 4, 1, "down", "./src/game/Graphics/Projectiles/blue_laser.png", 
 			    new Sound("./src/game/Sound/SoundEffects/laser.wav")), "./src/game/Graphics/Enemies/blue_enemy3.png");
 		this.shooting = false;

@@ -26,7 +26,7 @@ public class RedBoss extends Enemy {
 	private GameTimer shootingTimer2;
 	
 	public RedBoss() {
-		super(GamePanel.WIDTH / 2, GamePanel.HEIGHT / 2 - 150, 500, 3, 1, 100, 
+		super(GamePanel.WIDTH / 2, GamePanel.HEIGHT / 2 - 150, 800, 3, 1, 100, 
 			new Weapon(-1000, 1000, 6, 6, 4, 4, "down", "./src/game/Graphics/Projectiles/missile.png", 
 			new Sound("./src/game/Sound/SoundEffects/shot.wav")), "./src/game/Graphics/Enemies/red_boss.png");
 		this.shooting = true;

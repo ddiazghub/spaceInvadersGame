@@ -10,8 +10,6 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.io.File;
 import javax.imageio.ImageIO;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  *

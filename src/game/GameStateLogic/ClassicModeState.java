@@ -51,7 +51,7 @@ public class ClassicModeState extends GameState {
 	}
 
 	public void init() {
-		Weapon base = new Weapon(-1000, 1000, 1, 12, 20, "up", "./src/game/Graphics/Projectiles/disparo.png", new Sound("./src/game/Sound/SoundEffects/shot.wav"));
+		Weapon base = new Weapon(-1000, 1000, 1, 12, 1, "up", "./src/game/Graphics/Projectiles/disparo.png", new Sound("./src/game/Sound/SoundEffects/shot.wav"));
 		this.invaders = new InvaderGroup(10, 50, 6, 9);
 		this.deadInvaders = new ArrayList<>();
 		this.scaling = new DifficultyScaling(false, "log");
@@ -132,7 +132,7 @@ public class ClassicModeState extends GameState {
 			invader.getWeapon().collision(player);
 			if (invader.isDead()) {
 				this.score.addScore(invader.getScore());
-				this.invaders.stop(200);
+				this.invaders.stop(100);
 				this.deadInvaders.add(invader);
 			}
 			if (this.player.getBounds().intersects(invader.getBounds())) gameOver();

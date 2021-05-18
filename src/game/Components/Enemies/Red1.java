@@ -18,7 +18,7 @@ import java.util.Random;
 public class Red1 extends Enemy {
 	
 	public Red1() {
-		super(100, -500, 30, 1, 1 + new Random().nextInt(1), 100, 
+		super(100, -500, 50, 1, 1 + new Random().nextInt(1), 100, 
 				new Weapon(-1000, 1000, 7, 4, 1, 0.4, "down", "./src/game/Graphics/Projectiles/shock.png", 
 			    new Sound("./src/game/Sound/SoundEffects/shot.wav")), "./src/game/Graphics/Enemies/red_enemy1.png");
 		this.shooting = true;

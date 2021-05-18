@@ -31,7 +31,7 @@ public class BlueBoss extends Enemy {
 	private boolean spawnedHelpers = false;
 	
 	public BlueBoss() {
-		super(-1000, -1000, 300, 3, 0, 100, 
+		super(-1000, -1000, 800, 3, 0, 100, 
 				new Weapon(-1000, 1000, 4, 6, 10, 4, "down", "./src/game/Graphics/Projectiles/blue_plasma.png", 
 						new Sound("./src/game/Sound/SoundEffects/laser.wav")), "./src/game/Graphics/Enemies/blue_boss.png");
 		this.shooting = false;

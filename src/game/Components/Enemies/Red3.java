@@ -21,7 +21,7 @@ public class Red3 extends Enemy {
 	private int xDir;
 	
 	public Red3() {
-		super(-1000, -1000, 30, 1, 2 + new Random().nextInt(2), 100, new Weapon(-1000, 1000, 7, 4, 1, 0.4, "down", "./src/game/Graphics/Projectiles/missile.png", new Sound("./src/game/Sound/SoundEffects/shot.wav")), "./src/game/Graphics/Enemies/red_enemy4.png");
+		super(-1000, -1000, 300, 1, 2 + new Random().nextInt(2), 100, new Weapon(-1000, 1000, 30, 4, 1, 0.4, "down", "./src/game/Graphics/Projectiles/missile.png", new Sound("./src/game/Sound/SoundEffects/shot.wav")), "./src/game/Graphics/Enemies/red_enemy4.png");
 		this.shooting = true;
 		this.weapon.setExplosive(true);
 		Random rng = new Random();
