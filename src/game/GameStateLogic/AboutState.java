@@ -22,7 +22,7 @@ import java.util.HashMap;
 public class AboutState extends GameState {
 
 	private HashMap<String, Sound> sounds;
-	private String[] text = {"Bienvenido al juego space invaders. Destruye", "la mayor cantidad de aliens que puedas para", "obtener la mejor puntuación. Desarrollado por:", "- David Díaz.", "- Katy Díaz.", "- José Gayón."};
+	private String[] text = {"Bienvenido al juego space invaders. Destruye", "la mayor cantidad de aliens que puedas para", "obtener la mejor puntuación. Desarrollado por:", "- David Díaz.", "- Katy Díaz.", "----------------"};
 	private int currentSelection = 0;
 
 	public AboutState(GameStateManager stateManager, Sound music) {
